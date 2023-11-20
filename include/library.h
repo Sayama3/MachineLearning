@@ -1,6 +1,5 @@
-#ifndef MACHINELEARNING_LIBRARY_H
-#define MACHINELEARNING_LIBRARY_H
+#pragma once
+#include <machinelearning_export.hpp>
 
-void hello();
+ML_API void hello();
 
-#endif //MACHINELEARNING_LIBRARY_H
