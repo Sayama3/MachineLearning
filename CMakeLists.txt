@@ -10,10 +10,8 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_compile_definitions(MACHINE_LEARNING_EXPORTS)
 
 
-option(ML_SHARED_BUILD "The ${MachineLearning} lib in shared mode" ON)
-
-#TODO: see if we really want to do that. We should.
-option(ML_USE_LOGS "Enable the logs in the machine learning libraries" ON)
+option(ML_SHARED_BUILD "Use the MachineLearning library in shared mode." ON)
+option(ML_USE_LOGS "Enable the logs in the MachineLearning library." ON)
 
 
 set(ML_SRC_FILES
