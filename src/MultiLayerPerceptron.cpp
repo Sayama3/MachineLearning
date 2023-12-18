@@ -9,11 +9,13 @@ namespace GG::ML {
 	MultiLayerPerceptron::MultiLayerPerceptron(const Real *data, Integer dataCount, const Integer *layerCounts,Integer layerCount)
 	: m_Data(data, data + dataCount), m_LayerCounts(layerCounts, layerCounts + layerCount)
 	{
+		initialize();
 	}
 
 	MultiLayerPerceptron::MultiLayerPerceptron(const Integer *layerCounts,Integer layerCount)
 	: m_Data(), m_LayerCounts(layerCounts, layerCounts + layerCount)
 	{
+		initialize();
 	}
 
 	MultiLayerPerceptron::~MultiLayerPerceptron()
@@ -27,6 +29,7 @@ namespace GG::ML {
 
 	void MultiLayerPerceptron::initialize()
 	{
+
 	}
 } // GG
 // ML
