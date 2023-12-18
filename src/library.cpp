@@ -2,6 +2,30 @@
 
 #include <iostream>
 
-void hello() {
-    std::cout << "Hello, World!" << std::endl;
+void infos()
+{
+    std::cout << "Library 'MachineLearning' is working." << std::endl;
+}
+
+void initialize()
+{
+
+}
+
+void update(Real timestep)
+{
+
+}
+
+void shutdown()
+{
+
+}
+
+void mlpCreate(Integer *entries, Integer count) {
+
+}
+
+void mlpRun(Real *data, Integer count) {
+
 }

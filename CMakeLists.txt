@@ -17,6 +17,10 @@ option(ML_USE_LOGS "Enable the logs in the MachineLearning library." ON)
 set(ML_SRC_FILES
         src/library.cpp
         include/library.h
+        src/Logger.cpp
+        include/Logger.hpp
+        src/MultiLayerPerceptron.cpp
+        src/MultiLayerPerceptron.hpp
 )
 
 if(ML_SHARED_BUILD)
@@ -66,8 +70,8 @@ target_include_directories(${LIBRARY_TARGET_NAME} PRIVATE
 target_link_libraries(${LIBRARY_TARGET_NAME} PUBLIC glm)
 if(ML_USE_LOGS)
     #TODO: See if we really need the spdlog library.
-    target_link_libraries(${LIBRARY_TARGET_NAME} PRIVATE spdlog::spdlog_header_only)
-    target_compile_definitions(${LIBRARY_TARGET_NAME} PRIVATE ML_USE_LOGS)
+#    target_link_libraries(${LIBRARY_TARGET_NAME} PUBLIC spdlog::spdlog)
+    target_compile_definitions(${LIBRARY_TARGET_NAME} PUBLIC ML_USE_LOGS)
 endif()
 
 #target_precompile_headers(${LIBRARY_TARGET_NAME}
