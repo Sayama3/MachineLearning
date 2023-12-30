@@ -21,6 +21,8 @@ set(ML_SRC_FILES
         include/Logger.hpp
         src/MultiLayerPerceptron.cpp
         src/MultiLayerPerceptron.hpp
+        src/Vector2D.cpp
+        src/Vector2D.hpp
 )
 
 if(ML_SHARED_BUILD)
