@@ -8,6 +8,7 @@
 #include <array>
 #include <vector>
 #include <stdexcept>
+#include <string>
 
 namespace GG::ML {
 
