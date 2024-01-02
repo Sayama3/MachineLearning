@@ -42,9 +42,14 @@ TypeId mlpCreate(const Integer* entries, Integer count)
 	return id;
 }
 
+bool mlpIsValid(TypeId id)
+{
+	return s_MLPs && id < s_MLPId && (*s_MLPs)[id];
+}
+
 void mlpDelete(TypeId id)
 {
-	if(!s_MLPs || !(*s_MLPs)[id]) return;
+	if(!mlpIsValid(id)) return;
 
 	delete (*s_MLPs)[id];
 	(*s_MLPs)[id] = nullptr;
@@ -53,21 +58,21 @@ void mlpDelete(TypeId id)
 
 void mlpPropagate(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification)
 {
-	if(!s_MLPs || !(*s_MLPs)[id]) return;
+	if(!mlpIsValid(id)) return;
 
 	(*s_MLPs)[id]->Propagate(rawInputs ,rawInputsCount ,isClassification);
 }
 
 Real mlpPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification)
 {
-	if(!s_MLPs || !(*s_MLPs)[id]) return -1.0;
+	if(!mlpIsValid(id)) return -1.0;
 
 	return (*s_MLPs)[id]->Predict(rawInputs, rawInputsCount , isClassification);
 }
 
 void mlpTrain(TypeId id, const Real* rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight, const Real* rawExcpectedOutputs, Integer rawExcpectedOutputsWidth, Integer rawExcpectedOutputsHeight, bool isClassification, float alpha, Integer maxIter)
 {
-	if(!s_MLPs || !(*s_MLPs)[id]) return;
+	if(!mlpIsValid(id)) return;
 
 	(*s_MLPs)[id]->Train(rawAllInputs , rawAllInputsWidth , rawAllInputsHeight , rawExcpectedOutputs , rawExcpectedOutputsWidth , rawExcpectedOutputsHeight , isClassification , alpha , maxIter);
 }
