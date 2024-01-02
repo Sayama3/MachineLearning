@@ -3,7 +3,7 @@
 
 extern "C"
 {
-	typedef long long Integer;
+	typedef long long int Integer;
 	typedef double Real;
 
     ML_API void infos();
