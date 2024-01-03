@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 
 add_subdirectory(lib)
+add_subdirectory(Google_Tests/lib/googletest)
 
 project(MachineLearning VERSION 0.0.1 DESCRIPTION "The core library of the MachineLearning library.")
 set(LIBRARY_TARGET_NAME MLCore)
