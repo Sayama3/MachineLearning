@@ -7,3 +7,6 @@
 [submodule "Google_Tests/lib/googletest"]
 	path = Google_Tests/lib/googletest
 	url = https://github.com/google/googletest.git
+[submodule "lib/matplotlib-cpp"]
+	path = lib/matplotlib-cpp
+	url = https://github.com/lava/matplotlib-cpp.git
