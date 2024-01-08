@@ -26,6 +26,8 @@ set(ML_SRC_FILES
         src/Vector.hpp
         src/UUID.hpp
         src/UUID.cpp
+        src/TestMatplotlib.cpp
+        src/TestMatplotlib.hpp
 )
 
 if(ML_SHARED_BUILD)
