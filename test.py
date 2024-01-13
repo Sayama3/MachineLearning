@@ -11,6 +11,11 @@ def find_files(filename, search_path):
    return result
 
 dlls = find_files("MLCore.dll", "./")
+
+if(len(dlls) == 0):
+   print("DLL not found. Exiting.")
+   exit()
+
 dllPath = dlls[0]
 print("Using '" + dllPath + "'.")
 libc = cdll.LoadLibrary(dllPath)
