@@ -106,7 +106,7 @@ void linearEvaluate(TypeId id,const Real* entries){
     if(!linearIsValid(id)) return;
     (*s_Linears)[id]->predict(entries);
 }
-void mlpDelete(TypeId id)
+void linearDelete(TypeId id)
 {
     if(!linearIsValid(id)) return;
 
