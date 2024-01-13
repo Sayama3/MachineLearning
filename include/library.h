@@ -7,7 +7,7 @@ extern "C"
 	typedef unsigned long long int TypeId;
 	typedef double Real;
 
-    ML_API void infos();
+    ML_API int infos();
 
 	// Library functions
     ML_API void initialize();

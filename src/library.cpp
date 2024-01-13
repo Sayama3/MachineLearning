@@ -12,9 +12,10 @@ static TypeId s_LinearId = 0;
 static std::vector<MultiLayerPerceptron*>* s_MLPs = nullptr;
 static std::vector<LinearModel*>* s_Linears = nullptr;
 
-void infos()
+int infos()
 {
     std::cout << "Library 'MachineLearning' is working." << std::endl;
+    return 0;
 }
 
 void initialize()
