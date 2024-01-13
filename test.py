@@ -1,19 +1,25 @@
 import os
 from ctypes import cdll
 
+
 def find_files(filename, search_path):
-   result = []
+    result = []
 
-# Wlaking top-down from the root
-   for root, dir, files in os.walk(search_path):
-      if filename in files:
-         result.append(os.path.join(root, filename))
-   return result
+    # Wlaking top-down from the root
+    for root, dir, files in os.walk(search_path):
+        if filename in files:
+            result.append(os.path.join(root, filename))
+    return result
 
-dlls = find_files("MLCore.dll", "./")
+def find_dll():
+   dlls = find_files("MLCore.dll", "./")
+   if (len(dlls) == 0):
+       dlls = find_files("libMLCore.dll", "./")
+   return dlls
 
-if(len(dlls) == 0):
-   print("DLL not found. Exiting.")
+dlls = find_dll()
+if len(dlls) == 0:
+   print("didn't found dll named 'MLCore.dll' nor 'libMLCore.dll'.")
    exit()
 
 dllPath = dlls[0]
