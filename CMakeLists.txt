@@ -25,6 +25,8 @@ set(ML_SRC_FILES
         src/Vector.hpp
         src/UUID.hpp
         src/UUID.cpp
+        src/LinearModel.cpp
+        src/LinearModel.h
 )
 
 if(ML_SHARED_BUILD)
