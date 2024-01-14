@@ -163,7 +163,7 @@ def LinearSimple3D():
 
     from mpl_toolkits.mplot3d import Axes3D
     fig = plt.figure()
-    ax = Axes3D(fig)
+    ax = fig.add_subplot(111, projection='3d')
     ax.scatter(X[:, 0], X[:, 1], Y)
     plt.show()
     plt.clf()
@@ -183,7 +183,7 @@ def LinearTricky3D():
 
     from mpl_toolkits.mplot3d import Axes3D
     fig = plt.figure()
-    ax = Axes3D(fig)
+    ax = fig.add_subplot(111, projection='3d')
     ax.scatter(X[:, 0], X[:, 1], Y)
     plt.show()
     plt.clf()
@@ -205,7 +205,7 @@ def NonLinearSimple3D():
 
     from mpl_toolkits.mplot3d import Axes3D
     fig = plt.figure()
-    ax = Axes3D(fig)
+    ax = fig.add_subplot(111, projection='3d')
     ax.scatter(X[:, 0], X[:, 1], Y)
     plt.show()
     plt.clf()
