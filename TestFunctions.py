@@ -17,9 +17,9 @@ def LinearSimple(libc, useMLP = False, width_size = 4, height_size = 4, width_po
         -1,
         -1
     ], np.float64)
-    idL = libc.linearCreate(0.1,X.ravel(),Y.ravel(),np.shape(X)[1],np.shape(X)[0])
+    idL = libc.linearCreate(1,X.ravel(),Y.ravel(),np.shape(X)[1],np.shape(X)[0])
 
-    libc.mlpTrain(id, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], True, 0.1, 1000)
+    libc.mlpTrain(id, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], True, 1, 1000)
     libc.linearTrain(idL,5000,0)
     test_X = np.array([[(w / width_points) * width_size, (h / height_points) * height_size] for w in range(0,width_points) for h in range(0, height_points)], np.float64)
 
@@ -28,9 +28,9 @@ def LinearSimple(libc, useMLP = False, width_size = 4, height_size = 4, width_po
         test_colors = []
         for input_x in test_X:
             predictCount = libc.mlpPredict(id, input_x.ravel(), input_x.ravel().size, False)
-            test_colors.append('lightblue' if libc.mlpGetPredictData(id, 0) >= 0 else 'pink')
+            test_colors.append('pink' if libc.mlpGetPredictData(id, 0) >= 0 else 'lightblue')
     else :
-        test_colors = ['lightblue' if libc.linearEvaluate(idL, input_x) >= 0 else 'pink' for input_x in test_X]
+        test_colors = ['pink' if libc.linearEvaluate(idL, input_x) >= 0 else 'lightblue' for input_x in test_X]
 
 
     # Show MLP prediction
