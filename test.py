@@ -248,17 +248,32 @@ print("Using '" + dllPath + "'.")
 libc = cdll.LoadLibrary(dllPath)
 
 # Prototypes de fonction
+INT = ctypes.wintypes.INT;
+REAL = ctypes.c_double;
+
 ND_POINTER_INT = np.ctypeslib.ndpointer(dtype=np.int32, ndim=1, flags="C")
-ND_POINTER_FLOAT = np.ctypeslib.ndpointer(dtype=np.float64, ndim=1, flags="C")
+ND_POINTER_FLOAT = np.ctypeslib.ndpointer(REAL, ndim=1, flags="C")
+
 
 libc.mlpCreate.argtypes = [ND_POINTER_INT, ctypes.wintypes.INT]
 libc.mlpCreate.restype = np.int32
 
-libc.mlpPredict.argtypes = [ctypes.wintypes.INT, ND_POINTER_FLOAT, ctypes.wintypes.INT, ctypes.c_bool]
-libc.mlpPredict.restype = np.float64
+#	ML_API void mlpPropagate(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification);
+#libc.mlpPropagate.argtypes = [INT,ND_POINTER_FLOAT,INT,ctypes.c_bool]
 
-width = 300
-height = 300
+#	ML_API void mlpTrain(TypeId id, const Real* rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight, const Real* rawExcpectedOutputs, Integer rawExcpectedOutputsWidth, Integer rawExcpectedOutputsHeight, bool isClassification = true, float alpha = 0.01f, Integer maxIter = 1000);
+libc.mlpTrain.argtypes = [INT,ND_POINTER_FLOAT,INT,INT,ND_POINTER_FLOAT,INT,INT,ctypes.c_bool,REAL,INT]
+
+
+libc.mlpPredict.argtypes = [ctypes.wintypes.INT, ND_POINTER_FLOAT, ctypes.wintypes.INT, ctypes.c_bool]
+libc.mlpPredict.restype = REAL
+
+
+
+width_size = 300
+height_size = 300
+width_points = 100
+height_points = 100
 entries = np.array([2,2,1], np.int32)
 count = 3
 
@@ -266,19 +281,29 @@ count = 3
 libc.initialize()
 id = libc.mlpCreate(entries, count)
 
-#libc.mlpPropagate()
-
 # Dataset
 X = np.array([
     [1, 1],
     [2, 3],
     [3, 3]
-])
+],np.float64)
+Y = np.array([
+    1,
+    -1,
+    -1
+],np.float64)
 
+#	ML_API void mlpTrain(TypeId id, const Real* rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight, const Real* rawExcpectedOutputs, Integer rawExcpectedOutputsWidth, Integer rawExcpectedOutputsHeight, bool isClassification = true, float alpha = 0.01f, Integer maxIter = 1000);
 
-test_X = np.array([[w / width, h / height] for w in range(0,width) for h in range(0, height)], np.float64)
-test_colors = ['lightblue' if libc.mlpPredict(id, input_x, width*height, False) >= 0 else 'pink' for input_x in test_X]
+libc.mlpTrain(id, X.ravel(), X[0].size, X.size, Y.ravel(), Y[0].size, Y.size, True, 0.1, 10)
+
+# Affichage points
+test_X = np.array([[w / width_points, h / height_points] for w in range(0,width_size) for h in range(0, height_size)], np.float64)
+test_colors = ['lightblue' if libc.mlpPredict(id, input_x, width_points*height_points, False) >= 0 else 'pink' for input_x in test_X]
+
 plt.scatter(test_X[:, 0], test_X[:, 1], c=test_colors)
+
+# Affichage points dataset
 plt.scatter(X[0, 0], X[0, 1], color='blue')
 plt.scatter(X[1:3, 0], X[1:3, 1], color='red')
 plt.title('Linear simple')
