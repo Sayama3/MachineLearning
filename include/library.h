@@ -3,8 +3,8 @@
 
 extern "C"
 {
-	typedef long long int Integer;
-	typedef unsigned long long int TypeId;
+	typedef int Integer;
+	typedef int TypeId;
 	typedef double Real;
 
     ML_API int infos();

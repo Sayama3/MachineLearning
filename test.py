@@ -1,7 +1,8 @@
+import ctypes.wintypes
 import os
 
-import matplotlib.pyplot
 import matplotlib.pyplot as plt
+import numpy
 import numpy as np
 
 from ctypes import cdll
@@ -118,7 +119,6 @@ def MultiCross():
     plt.show()
     plt.clf()
 
-
 # Regression
 
 def LinearSimple2D():
@@ -135,7 +135,6 @@ def LinearSimple2D():
     plt.title('Linear Simple 2D')
     plt.show()
     plt.clf()
-
 
 def NonLinearSimple2D():
     X = np.array([
@@ -241,16 +240,52 @@ def AllGraphs():
 
 dlls = find_dll()
 if len(dlls) == 0:
-    print("didn't found dll named 'MLCore.dll' nor 'libMLCore.dll'.")
+    print("Couldn't find dll named 'MLCore.dll' nor 'libMLCore.dll'.")
     exit()
 
 dllPath = dlls[0]
 print("Using '" + dllPath + "'.")
 libc = cdll.LoadLibrary(dllPath)
-print("X = " + str(libc.infos()))
 
+# Prototypes de fonction
+ND_POINTER_INT = np.ctypeslib.ndpointer(dtype=np.int32, ndim=1, flags="C")
+ND_POINTER_FLOAT = np.ctypeslib.ndpointer(dtype=np.float64, ndim=1, flags="C")
+
+libc.mlpCreate.argtypes = [ND_POINTER_INT, ctypes.wintypes.INT]
+libc.mlpCreate.restype = np.int32
+
+libc.mlpPredict.argtypes = [ctypes.wintypes.INT, ND_POINTER_FLOAT, ctypes.wintypes.INT, ctypes.c_bool]
+libc.mlpPredict.restype = np.float64
+
+width = 300
+height = 300
+entries = np.array([2,2,1], np.int32)
+count = 3
+
+# Init lib
 libc.initialize()
+id = libc.mlpCreate(entries, count)
 
-AllGraphs()
+#libc.mlpPropagate()
 
+# Dataset
+X = np.array([
+    [1, 1],
+    [2, 3],
+    [3, 3]
+])
+
+
+test_X = np.array([[w / width, h / height] for w in range(0,width) for h in range(0, height)], np.float64)
+test_colors = ['lightblue' if libc.mlpPredict(id, input_x, width*height, False) >= 0 else 'pink' for input_x in test_X]
+plt.scatter(test_X[:, 0], test_X[:, 1], c=test_colors)
+plt.scatter(X[0, 0], X[0, 1], color='blue')
+plt.scatter(X[1:3, 0], X[1:3, 1], color='red')
+plt.title('Linear simple')
+plt.show()
+plt.clf()
+
+#LinearSimple2D()
+
+libc.mlpDelete(id)
 libc.shutdown()
