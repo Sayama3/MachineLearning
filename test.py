@@ -76,7 +76,7 @@ libc.linearDelete.argtypes = [INT]
 libc.initialize()
 
 # Execute test functions
-TestFunctions.LinearSimple(libc, True)
+TestFunctions.AllGraphs(libc, False)
 
 libc.shutdown()
 
