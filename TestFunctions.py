@@ -50,6 +50,9 @@ def LinearMultiple(libc, useMLP, width_size=3, height_size=3, width_points=100, 
     X = np.concatenate([np.random.random((50, 2)) * 0.9 + np.array([1, 1]), np.random.random((50, 2)) * 0.9 + np.array([2, 2])])
     Y = np.concatenate([np.ones((50, 1)), np.ones((50, 1)) * -1.0])
 
+    X.astype(np.float64)
+    Y.astype(np.float64)
+
     entries = np.array([2, 1], np.int32)
     Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points)
 
@@ -59,8 +62,8 @@ def LinearMultiple(libc, useMLP, width_size=3, height_size=3, width_points=100, 
 
 
 def XOR(libc, useMLP, width_size=1, height_size=1, width_points=100, height_points=100):
-    X = np.array([[1, 0], [0, 1], [0, 0], [1, 1]])
-    Y = np.array([1, 1, -1, -1])
+    X = np.array([[1, 0], [0, 1], [0, 0], [1, 1]], np.float64)
+    Y = np.array([1, 1, -1, -1], np.float64)
 
     entries = np.array([2, 2, 1], np.int32)
     Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points)
@@ -72,10 +75,11 @@ def XOR(libc, useMLP, width_size=1, height_size=1, width_points=100, height_poin
 
 def Cross(libc, useMLP, width_size=1, height_size=1, width_points=100, height_points=100):
     X = np.random.random((500, 2)) * 2.0 - 1.0
-    Y = np.array([1 if abs(p[0]) <= 0.3 or abs(p[1]) <= 0.3 else -1 for p in X])
+    Y = np.array([1 if abs(p[0]) <= 0.3 or abs(p[1]) <= 0.3 else -1 for p in X], np.float64)
+
+    X.astype(np.float64)
 
     entries = np.array([2, 4, 1], np.int32)
-
     Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points)
 
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]] == 1, enumerate(X)))))[:, 0],
@@ -92,10 +96,13 @@ def MultiLinear3Classes(libc, useMLP, width_size=1, height_size=1, width_points=
     Y = np.array([[1, 0, 0] if -p[0] - p[1] - 0.5 > 0 > p[1] and p[0] - p[1] - 0.5 < 0 else
                   [0, 1, 0] if -p[0] - p[1] - 0.5 < 0 < p[1] and p[0] - p[1] - 0.5 < 0 else
                   [0, 0, 1] if -p[0] - p[1] - 0.5 < 0 < p[0] - p[1] - 0.5 and p[1] < 0 else
-                  [0, 0, 0] for p in X])
+                  [0, 0, 0] for p in X], np.float64)
 
     X = X[[not np.all(arr == [0, 0, 0]) for arr in Y]]
     Y = Y[[not np.all(arr == [0, 0, 0]) for arr in Y]]
+
+    X.astype(np.float64)
+    Y.astype(np.float64)
 
     entries = np.array([2, 3], np.int32)
     Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points)
@@ -115,7 +122,9 @@ def MultiLinear3Classes(libc, useMLP, width_size=1, height_size=1, width_points=
 def MultiCross(libc, useMLP, width_size=1, height_size=1, width_points=100, height_points=100):
     X = np.random.random((1000, 2)) * 2.0 - 1.0
     Y = np.array([[1, 0, 0] if abs(p[0] % 0.5) <= 0.25 < abs(p[1] % 0.5) else [0, 1, 0] if abs(
-        p[0] % 0.5) > 0.25 >= abs(p[1] % 0.5) else [0, 0, 1] for p in X])
+        p[0] % 0.5) > 0.25 >= abs(p[1] % 0.5) else [0, 0, 1] for p in X], np.float64)
+
+    X.astype(np.float64)
 
     # Note: L'exemple stipule MLP (2, ?, ?, 3)... good luck
     entries = np.array([2, 3, 3, 3], np.int32)
@@ -139,11 +148,11 @@ def LinearSimple2D(libc, useMLP, width_size=2, height_size=3, width_points=100, 
     X = np.array([
         [1],
         [2]
-    ])
+    ], np.float64)
     Y = np.array([
         2,
         3
-    ])
+    ], np.float64)
 
     entries = np.array([1, 1], np.int32)
     Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points)
@@ -157,12 +166,12 @@ def NonLinearSimple2D(libc, useMLP, width_size=3, height_size=3, width_points=10
         [1],
         [2],
         [3]
-    ])
+    ], np.float64)
     Y = np.array([
         2,
         3,
         2.5
-    ])
+    ], np.float64)
 
     # Note: L'exemple stipule MLP (1, ?, 1)... good luck
     entries = np.array([1, 2, 1], np.int32)
@@ -177,12 +186,12 @@ def LinearSimple3D(libc, useMLP, width_size=3, height_size=3, width_points=100, 
         [1, 1],
         [2, 2],
         [3, 1]
-    ])
+    ], np.float64)
     Y = np.array([
         2,
         3,
         2.5
-    ])
+    ], np.float64)
 
     entries = np.array([2, 1], np.int32)
     Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points)
@@ -199,12 +208,12 @@ def LinearTricky3D():
         [1, 1],
         [2, 2],
         [3, 3]
-    ])
+    ], np.float64)
     Y = np.array([
         1,
         2,
         3
-    ])
+    ], np.float64)
 
     from mpl_toolkits.mplot3d import Axes3D
     fig = plt.figure()
@@ -219,13 +228,13 @@ def NonLinearSimple3D():
         [0, 1],
         [1, 1],
         [0, 0],
-    ])
+    ], np.float64)
     Y = np.array([
         2,
         1,
         -2,
         -1
-    ])
+    ], np.float64)
 
     from mpl_toolkits.mplot3d import Axes3D
     fig = plt.figure()
@@ -244,8 +253,8 @@ def AllGraphs(libc, useMLP):
     MultiCross(libc, useMLP)
 
     # Regression
-    LinearSimple2D()
-    NonLinearSimple2D()
+    LinearSimple2D(libc, useMLP)
+    NonLinearSimple2D(libc, useMLP)
     # LinearSimple3D()
     # LinearTricky3D()
     # NonLinearSimple3D()
