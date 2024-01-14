@@ -71,10 +71,12 @@ libc.linearTrain.argtypes = [INT, INT, INT]
 libc.linearEvaluate.argtypes = [INT, ND_POINTER_FLOAT]
 libc.linearEvaluate.restype = REAL
 
+libc.linearDelete.argtypes = [INT]
+
 libc.initialize()
 
 # Execute test functions
-TestFunctions.LinearSimple(libc)
+TestFunctions.LinearSimple(libc, True)
 
 libc.shutdown()
 

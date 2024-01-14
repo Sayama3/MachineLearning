@@ -1,11 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def LinearSimple(libc, useMLP = False, width_size = 4, height_size = 4, width_points = 100, height_points = 100):
+def Show(title):
+    plt.title(title)
+    plt.show()
+    plt.clf()
 
-    entries = np.array([2, 1], np.int32)
 
-    id = libc.mlpCreate(entries, entries.size)
+def LinearSimple(libc, useMLP = False, width_size=4, height_size=4, width_points=100, height_points=100):
+
     # Dataset
     X = np.array([
         [1, 1],
@@ -17,32 +20,33 @@ def LinearSimple(libc, useMLP = False, width_size = 4, height_size = 4, width_po
         -1,
         -1
     ], np.float64)
-    idL = libc.linearCreate(1,X.ravel(),Y.ravel(),np.shape(X)[1],np.shape(X)[0])
 
-    libc.mlpTrain(id, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], True, 1, 1000)
-    libc.linearTrain(idL,5000,0)
-    test_X = np.array([[(w / width_points) * width_size, (h / height_points) * height_size] for w in range(0,width_points) for h in range(0, height_points)], np.float64)
+    entries = np.array([2, 1], np.int32)
 
+    test_X = np.array([[(w / width_points) * width_size, (h / height_points) * height_size] for w in range(0, width_points) for h in range(0, height_points)], np.float64)
+    test_colors = []
 
-    if useMLP :
-        test_colors = []
+    if useMLP:
+        idMLP = libc.mlpCreate(entries, entries.size)
+        libc.mlpTrain(idMLP, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], True, 1, 1000)
         for input_x in test_X:
-            predictCount = libc.mlpPredict(id, input_x.ravel(), input_x.ravel().size, False)
-            test_colors.append('pink' if libc.mlpGetPredictData(id, 0) >= 0 else 'lightblue')
-    else :
-        test_colors = ['pink' if libc.linearEvaluate(idL, input_x) >= 0 else 'lightblue' for input_x in test_X]
+            predictCount = libc.mlpPredict(idMLP, input_x.ravel(), input_x.ravel().size, False)
+            test_colors.append('pink' if libc.mlpGetPredictData(idMLP, 0) >= 0 else 'lightblue')
+        libc.mlpDelete(idMLP)
 
+    else:
+        idLinear = libc.linearCreate(1, X.ravel(), Y.ravel(), np.shape(X)[1], np.shape(X)[0])
+        libc.linearTrain(idLinear, 5000, 0)
+        test_colors = ['pink' if libc.linearEvaluate(idLinear, input_x) >= 0 else 'lightblue' for input_x in test_X]
+        libc.linearDelete(idLinear)
 
-    # Show MLP prediction
+    # Show prediction
     plt.scatter(test_X[:, 0], test_X[:, 1], c=test_colors)
 
     # Show dataset
     plt.scatter(X[0, 0], X[0, 1], color='blue')
     plt.scatter(X[1:3, 0], X[1:3, 1], color='red')
-    plt.title('Linear simple')
-    plt.show()
-    plt.clf()
-    libc.mlpDelete(id)
+    Show('Linear simple')
 
 
 def LinearMultiple():
@@ -51,9 +55,7 @@ def LinearMultiple():
 
     plt.scatter(X[0:50, 0], X[0:50, 1], color='blue')
     plt.scatter(X[50:100, 0], X[50:100, 1], color='red')
-    plt.title('Linear multiple')
-    plt.show()
-    plt.clf()
+    Show('Linear multiple')
 
 
 def XOR():
@@ -61,9 +63,7 @@ def XOR():
 
     plt.scatter(X[0:2, 0], X[0:2, 1], color='blue')
     plt.scatter(X[2:4, 0], X[2:4, 1], color='red')
-    plt.title('XOR')
-    plt.show()
-    plt.clf()
+    Show('XOR')
 
 
 def Cross():
@@ -76,9 +76,7 @@ def Cross():
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]] == -1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]] == -1, enumerate(X)))))[:, 1],
                 color='red')
-    plt.title('Cross')
-    plt.show()
-    plt.clf()
+    Show('Cross')
 
 
 def MultiLinear3Classes():
@@ -100,9 +98,7 @@ def MultiLinear3Classes():
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][2] == 1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][2] == 1, enumerate(X)))))[:, 1],
                 color='green')
-    plt.title('Multi linear 3 classes')
-    plt.show()
-    plt.clf()
+    Show('Multi linear 3 classes')
 
 
 def MultiCross():
@@ -119,9 +115,7 @@ def MultiCross():
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][2] == 1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][2] == 1, enumerate(X)))))[:, 1],
                 color='green')
-    plt.title('Multicross')
-    plt.show()
-    plt.clf()
+    Show('Multicross')
 
 
 # Regression
@@ -137,9 +131,7 @@ def LinearSimple2D():
     ])
 
     plt.scatter(X, Y)
-    plt.title('Linear Simple 2D')
-    plt.show()
-    plt.clf()
+    Show('Linear Simple 2D')
 
 
 def NonLinearSimple2D():
@@ -155,9 +147,7 @@ def NonLinearSimple2D():
     ])
 
     plt.scatter(X, Y)
-    plt.title('Non Linear Simple 2D')
-    plt.show()
-    plt.clf()
+    Show('Non Linear Simple 2D')
 
 
 def LinearSimple3D():
@@ -176,9 +166,7 @@ def LinearSimple3D():
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(X[:, 0], X[:, 1], Y)
-    plt.title('Linear Simple 3D')
-    plt.show()
-    plt.clf()
+    Show('Linear Simple 3D')
 
 
 def LinearTricky3D():
@@ -197,9 +185,7 @@ def LinearTricky3D():
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(X[:, 0], X[:, 1], Y)
-    plt.title('Linear tricky 3D')
-    plt.show()
-    plt.clf()
+    Show('Linear tricky 3D')
 
 
 def NonLinearSimple3D():
@@ -220,9 +206,7 @@ def NonLinearSimple3D():
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(X[:, 0], X[:, 1], Y)
-    plt.title('Non Linear Simple 3D')
-    plt.show()
-    plt.clf()
+    Show('Non Linear Simple 3D')
 
 
 def AllGraphs():
