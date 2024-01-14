@@ -22,12 +22,11 @@ public:
             Y.push_back(output[i]);
             std::vector<Real> entry(entrySize);
             for (int j = 0; j < entrySize; ++j) {
-                entry.push_back(entries[i*entrySize+entryCount]);
+                entry.push_back(entries[i*entrySize+j]);
             }
             X.push_back(entry);
         }
-        //weight.push_back(1.0f);
-        for (int i = 0; i < entrySize; ++i) {
+        for (int i = 0; i < entrySize+1; ++i) {
             auto max=static_cast<Real>(std::numeric_limits<uint64_t>().max());
             weight.push_back((ML_RAND*max)-max/2.0f);
         }
@@ -39,7 +38,7 @@ public:
             auto x=X[k];
             Real y=Y[k];
             switch(mode){
-                case 0 : trainOnceRosenblatt(x,y);break;
+                case 0 : trainOncePLA(x,y);break;
                 case 1 : trainOnceRosenblatt(x,y);break;
                 case 2 : throw "not implemented yet"; break;
             }
@@ -47,16 +46,19 @@ public:
     }
     Real predict(const Real* x) {
         Real result=0;
-        for (int i = 0; i < weight.size()+1; ++i) {
-            result+=(x[i] * (i == 0 ? 1 : weight[i - 1]));
+        result+=weight[0];
+        for (int i = 1; i < weight.size(); ++i) {
+            result+=(x[i-1]*weight[i]);
         }
         return result;
     }
     Real predict(const std::vector<Real> x) {
         Real result=0;
-        for (int i = 0; i < weight.size()+1; ++i) {
-            result+=(x[i] * (i == 0 ? 1 : weight[i - 1]));
+        result+=weight[0];
+        for (int i = 1; i < weight.size(); ++i) {
+            result+=(x[i-1]*weight[i]);
         }
+
         return result;
     }
 private:

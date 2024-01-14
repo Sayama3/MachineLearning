@@ -1,14 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def LinearSimple(libc):
+def LinearSimple(libc, useMLP = False, width_size = 4, height_size = 4, width_points = 100, height_points = 100):
 
     entries = np.array([2, 1], np.int32)
-
-    width_size = 3
-    height_size = 3
-    width_points = 100
-    height_points = 100
 
     id = libc.mlpCreate(entries, entries.size)
     # Dataset
@@ -22,17 +17,17 @@ def LinearSimple(libc):
         -1,
         -1
     ], np.float64)
-    idL = libc.linearCreate(0.1,X.ravel(),Y.ravel(),X[0].size,X.size)
+    idL = libc.linearCreate(0.1,X.ravel(),Y.ravel(),np.shape(X)[1],np.shape(X)[0])
 
     libc.mlpTrain(id, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], True, 0.1, 1000)
-    libc.linearTrain(idL,1000,0)
+    libc.linearTrain(idL,5000,0)
     test_X = np.array([[(w / width_points) * width_size, (h / height_points) * height_size] for w in range(0,width_points) for h in range(0, height_points)], np.float64)
 
 
-    if False :
+    if useMLP :
         test_colors = ['lightblue' if libc.mlpPredict(id, input_x, input_x.size, False) >= 0 else 'pink' for input_x in test_X]
     else :
-        test_colors = ['lightblue' if libc.linearEvaluate(idL, input_x) >= 0 else 'pink' for input_x in test_X]
+        test_colors = ['lightblue' if libc.linearEvaluate(idL, input_x) >= 0.5 else 'pink' for input_x in test_X]
 
 
     # Show MLP prediction
