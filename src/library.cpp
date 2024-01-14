@@ -103,9 +103,9 @@ void linearTrain(TypeId id,Integer count,Integer mode){
 
     (*s_Linears)[id]->Train(count,mode);
 }
-void linearEvaluate(TypeId id,const Real* entries){
-    if(!linearIsValid(id)) return;
-    (*s_Linears)[id]->predict(entries);
+Real linearEvaluate(TypeId id,const Real* entries){
+    if(!linearIsValid(id)) return 0.0;
+    return (*s_Linears)[id]->predict(entries);
 }
 void linearDelete(TypeId id)
 {
