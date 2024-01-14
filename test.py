@@ -36,7 +36,7 @@ def LinearSimple():
 
     plt.scatter(X[0, 0], X[0, 1], color='blue')
     plt.scatter(X[1:3, 0], X[1:3, 1], color='red')
-    plt.title = 'Linear Simple'
+    plt.title('Linear simple')
     plt.show()
     plt.clf()
 
@@ -47,6 +47,7 @@ def LinearMultiple():
 
     plt.scatter(X[0:50, 0], X[0:50, 1], color='blue')
     plt.scatter(X[50:100, 0], X[50:100, 1], color='red')
+    plt.title('Linear multiple')
     plt.show()
     plt.clf()
 
@@ -56,6 +57,7 @@ def XOR():
 
     plt.scatter(X[0:2, 0], X[0:2, 1], color='blue')
     plt.scatter(X[2:4, 0], X[2:4, 1], color='red')
+    plt.title('XOR')
     plt.show()
     plt.clf()
 
@@ -70,6 +72,7 @@ def Cross():
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]] == -1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]] == -1, enumerate(X)))))[:, 1],
                 color='red')
+    plt.title('Cross')
     plt.show()
     plt.clf()
 
@@ -93,14 +96,14 @@ def MultiLinear3Classes():
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][2] == 1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][2] == 1, enumerate(X)))))[:, 1],
                 color='green')
+    plt.title('Multi linear 3 classes')
     plt.show()
     plt.clf()
 
 
 def MultiCross():
     X = np.random.random((1000, 2)) * 2.0 - 1.0
-    Y = np.array([[1, 0, 0] if abs(p[0] % 0.5) <= 0.25 and abs(p[1] % 0.5) > 0.25 else [0, 1, 0] if abs(
-        p[0] % 0.5) > 0.25 and abs(p[1] % 0.5) <= 0.25 else [0, 0, 1] for p in X])
+    Y = np.array([[1, 0, 0] if abs(p[0] % 0.5) <= 0.25 < abs(p[1] % 0.5) else [0, 1, 0] if abs(p[0] % 0.5) > 0.25 >= abs(p[1] % 0.5) else [0, 0, 1] for p in X])
 
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][0] == 1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][0] == 1, enumerate(X)))))[:, 1],
@@ -111,6 +114,7 @@ def MultiCross():
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][2] == 1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][2] == 1, enumerate(X)))))[:, 1],
                 color='green')
+    plt.title('Multicross')
     plt.show()
     plt.clf()
 
@@ -128,6 +132,7 @@ def LinearSimple2D():
     ])
 
     plt.scatter(X, Y)
+    plt.title('Linear Simple 2D')
     plt.show()
     plt.clf()
 
@@ -145,6 +150,7 @@ def NonLinearSimple2D():
     ])
 
     plt.scatter(X, Y)
+    plt.title('Non Linear Simple 2D')
     plt.show()
     plt.clf()
 
@@ -165,6 +171,7 @@ def LinearSimple3D():
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(X[:, 0], X[:, 1], Y)
+    plt.title('Linear Simple 3D')
     plt.show()
     plt.clf()
 
@@ -185,6 +192,7 @@ def LinearTricky3D():
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(X[:, 0], X[:, 1], Y)
+    plt.title('Linear tricky 3D')
     plt.show()
     plt.clf()
 
@@ -207,6 +215,7 @@ def NonLinearSimple3D():
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(X[:, 0], X[:, 1], Y)
+    plt.title('Non Linear Simple 3D')
     plt.show()
     plt.clf()
 
