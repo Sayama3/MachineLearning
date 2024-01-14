@@ -1,14 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points):
+def Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points, isClassification = True):
 
     test_X = np.array([[(w / width_points) * width_size, (h / height_points) * height_size] for w in range(0, width_points) for h in range(0, height_points)], np.float64)
     test_colors = []
 
     if useMLP:
         idMLP = libc.mlpCreate(entries, entries.size)
-        libc.mlpTrain(idMLP, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], True, 1, 1000)
+        libc.mlpTrain(idMLP, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], isClassification, 1, 1000)
         for input_x in test_X:
             predictCount = libc.mlpPredict(idMLP, input_x.ravel(), input_x.ravel().size, False)
             test_colors.append('pink' if libc.mlpGetPredictData(idMLP, 0) >= 0 else 'lightblue')
@@ -144,7 +144,7 @@ def MultiCross(libc, useMLP, width_size=1, height_size=1, width_points=100, heig
 
 # Regression
 
-def LinearSimple2D(libc, useMLP, width_size=2, height_size=3, width_points=100, height_points=100):
+def LinearSimple2D(libc, useMLP, width_size=2, height_size=3, width_points=100, height_points=100, False):
     X = np.array([
         [1],
         [2]
@@ -161,7 +161,7 @@ def LinearSimple2D(libc, useMLP, width_size=2, height_size=3, width_points=100, 
     Show('Linear Simple 2D')
 
 
-def NonLinearSimple2D(libc, useMLP, width_size=3, height_size=3, width_points=100, height_points=100):
+def NonLinearSimple2D(libc, useMLP, width_size=3, height_size=3, width_points=100, height_points=100, False):
     X = np.array([
         [1],
         [2],
@@ -180,8 +180,8 @@ def NonLinearSimple2D(libc, useMLP, width_size=3, height_size=3, width_points=10
     plt.scatter(X, Y)
     Show('Non Linear Simple 2D')
 
-# Note: les graphs 3d sont certainement broken
-def LinearSimple3D(libc, useMLP, width_size=3, height_size=3, width_points=100, height_points=100):
+# Note: les graphs 3d sont broken (Montre un graph 2d + un graph 3d
+def LinearSimple3D(libc, useMLP, width_size=3, height_size=3, width_points=100, height_points=100, False):
     X = np.array([
         [1, 1],
         [2, 2],
@@ -194,7 +194,7 @@ def LinearSimple3D(libc, useMLP, width_size=3, height_size=3, width_points=100, 
     ], np.float64)
 
     entries = np.array([2, 1], np.int32)
-    Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points)
+    Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points, False)
 
     from mpl_toolkits.mplot3d import Axes3D
     fig = plt.figure()
