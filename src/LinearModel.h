@@ -9,6 +9,7 @@
 #include "UUID.hpp"
 #include <limits>
 #include <cmath>
+#include <iostream>
 
 class LinearModel {
 private:
@@ -28,7 +29,7 @@ public:
         }
         for (int i = 0; i < entrySize+1; ++i) {
             auto max=static_cast<Real>(std::numeric_limits<uint64_t>().max());
-            weight.push_back((ML_RAND*max)-max/2.0f);
+            weight.push_back(ML_RAND);
         }
     }
     //0 PLA, 1 Rosenblatt, 2 pseudoInvert
@@ -38,39 +39,41 @@ public:
             auto x=X[k];
             Real y=Y[k];
             switch(mode){
-                case 0 : trainOncePLA(x,y);break;
-                case 1 : trainOnceRosenblatt(x,y);break;
+                case 1 : trainOncePLA(x,y);break;
+                case 0 : trainOnceRosenblatt(x,y);break;
                 case 2 : throw "not implemented yet"; break;
             }
+            std::cout<<weight[0]<<" weights "<< weight[1] << " 2 =>" << weight[2]<<std::endl;
         }
     }
     Real predict(const Real* x) {
         Real result=0;
         result+=weight[0];
         for (int i = 1; i < weight.size(); ++i) {
-            result+=(x[i-1]*weight[i]);
+            result+=x[i-1]*weight[i];
         }
-        return result;
+        return result >= 0 ? 1.0 : -1.0;
     }
     Real predict(const std::vector<Real> x) {
         Real result=0;
         result+=weight[0];
         for (int i = 1; i < weight.size(); ++i) {
-            result+=(x[i-1]*weight[i]);
+            result+=x[i-1]*weight[i];
         }
-
-        return result;
+        return result >= 0 ? 1.0 : -1.0;
     }
 private:
     void trainOnceRosenblatt(std::vector<Real> input,Real expected){
         Real dist=step*(expected - predict(input));
-        for (int i = 0; i < weight.size(); ++i) {
-            weight[i] = weight[i] + dist * (i == 0 ? 1 : input[i - 1]);
+        weight[0]=weight[0]+dist*1;
+        for (int i = 1; i < weight.size(); ++i) {
+            weight[i] = weight[i] + dist * input[i - 1];
         }
     }
     void trainOncePLA(std::vector<Real> input,Real expected){
+        weight[0]=weight[0]+step * expected*1;
         for (int i = 0; i < weight.size(); ++i) {
-            weight[i] = weight[i] + step * expected * (i == 0 ? 1 : input[i - 1]);
+            weight[i] = weight[i] + step * expected *  input[i - 1];
         }
     }
 
