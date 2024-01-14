@@ -6,6 +6,7 @@
 #include "UUID.hpp"
 #include <limits>
 #include <cmath>
+#include <iostream>
 
 
 namespace GG::ML {
@@ -77,10 +78,16 @@ namespace GG::ML {
 		Propagate(inputs, isClassification);
 	}
 
-	const Real* MultiLayerPerceptron::Predict(const Real* rawInputs, Integer rawInputsCount, bool isClassification)
+	Integer MultiLayerPerceptron::Predict(const Real* rawInputs, Integer rawInputsCount, bool isClassification)
 	{
 		std::vector<Real> inputs(rawInputs, rawInputs + rawInputsCount);
 		return Predict(inputs, isClassification);
+	}
+
+	Real MultiLayerPerceptron::GetPredictData(Integer index)
+	{
+		auto& arr = m_X[m_L];
+		return arr[index + 1];
 	}
 
 	void MultiLayerPerceptron::Propagate(const std::vector<Real>& inputs, bool isClassification)
@@ -108,16 +115,11 @@ namespace GG::ML {
 			}
 		}
 	}
-	const Real* MultiLayerPerceptron::Predict(const std::vector<Real>& inputs, bool isClassification)
+	Integer MultiLayerPerceptron::Predict(const std::vector<Real>& inputs, bool isClassification)
 	{
 		Propagate(inputs, isClassification);
 		auto& arr = m_X[m_L];
-		return &arr[1];
-	}
-
-	Integer MultiLayerPerceptron::PredictionSize() const
-	{
-		return static_cast<Integer>(m_X[m_L].size()) - 1;
+		return static_cast<Integer>(arr.size()) - 1;
 	}
 
 	void MultiLayerPerceptron::Train(const Real *rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight,

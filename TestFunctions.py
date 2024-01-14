@@ -25,9 +25,12 @@ def LinearSimple(libc, useMLP = False, width_size = 4, height_size = 4, width_po
 
 
     if useMLP :
-        test_colors = ['lightblue' if libc.mlpPredict(id, input_x, input_x.size, False) >= 0 else 'pink' for input_x in test_X]
+        test_colors = []
+        for input_x in test_X:
+            predictCount = libc.mlpPredict(id, input_x.ravel(), input_x.ravel().size, False)
+            test_colors.append('lightblue' if libc.mlpGetPredictData(id, 0) >= 0 else 'pink')
     else :
-        test_colors = ['lightblue' if libc.linearEvaluate(idL, input_x) >= 0.5 else 'pink' for input_x in test_X]
+        test_colors = ['lightblue' if libc.linearEvaluate(idL, input_x) >= 0 else 'pink' for input_x in test_X]
 
 
     # Show MLP prediction

@@ -25,13 +25,13 @@ namespace GG::ML {
 		~MultiLayerPerceptron();
 
 		void Propagate(const Real* rawInputs, Integer rawInputsCount, bool isClassification);
-		const Real* Predict(const Real* rawInputs, Integer rawInputsCount, bool isClassification = true);
-		Integer PredictionSize() const;
+		Integer Predict(const Real* rawInputs, Integer rawInputsCount, bool isClassification = true);
+		Real GetPredictData(Integer index);
 		void Train(const Real* rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight, const Real* rawExcpectedOutputs, Integer rawExcpectedOutputsWidth, Integer rawExcpectedOutputsHeight, bool isClassification = true, float alpha = 0.01f, Integer maxIter = 1000);
 
 	private:
 		void Propagate(const std::vector<Real>& inputs, bool isClassification);
-		const Real* Predict(const std::vector<Real>& inputs, bool isClassification);
+		Integer Predict(const std::vector<Real>& inputs, bool isClassification);
 		void initialize();
 	};
 

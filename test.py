@@ -54,7 +54,11 @@ libc.mlpTrain.argtypes = [INT, ND_POINTER_FLOAT, INT, INT, ND_POINTER_FLOAT, INT
 
 # 	ML_API Real mlpPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification = true);
 libc.mlpPredict.argtypes = [ctypes.wintypes.INT, ND_POINTER_FLOAT, ctypes.wintypes.INT, ctypes.c_bool]
-libc.mlpPredict.restype = REAL
+libc.mlpPredict.restype = INT
+
+# 	ML_API Real mlpGetPredictData(TypeId id, Integer index);
+libc.mlpGetPredictData.argtypes = [ctypes.wintypes.INT, ctypes.wintypes.INT]
+libc.mlpGetPredictData.restype = ctypes.wintypes.DOUBLE
 
 #     ML_API TypeId linearCreate(Real step,const Real* entries, const Real*output,Integer entrySize, Integer entryCount);
 libc.linearCreate.argtypes = [REAL, ND_POINTER_FLOAT, ND_POINTER_FLOAT, INT, INT]

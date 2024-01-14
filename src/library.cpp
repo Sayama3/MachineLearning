@@ -85,11 +85,17 @@ void mlpPropagate(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool
 	(*s_MLPs)[id]->Propagate(rawInputs ,rawInputsCount ,isClassification);
 }
 
-const Real* mlpPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification)
+Integer mlpPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification)
 {
-	if(!mlpIsValid(id)) return nullptr;
+	if(!mlpIsValid(id)) return 0;
 
 	return (*s_MLPs)[id]->Predict(rawInputs, rawInputsCount , isClassification);
+}
+
+Real mlpGetPredictData(TypeId id, Integer index)
+{
+	if(!mlpIsValid(id)) return 0;
+	return (*s_MLPs)[id]->GetPredictData(index);
 }
 
 void mlpTrain(TypeId id, const Real* rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight, const Real* rawExcpectedOutputs, Integer rawExcpectedOutputsWidth, Integer rawExcpectedOutputsHeight, bool isClassification, float alpha, Integer maxIter)
@@ -98,6 +104,7 @@ void mlpTrain(TypeId id, const Real* rawAllInputs, Integer rawAllInputsWidth, In
 
 	(*s_MLPs)[id]->Train(rawAllInputs , rawAllInputsWidth , rawAllInputsHeight , rawExcpectedOutputs , rawExcpectedOutputsWidth , rawExcpectedOutputsHeight , isClassification , alpha , maxIter);
 }
+
 void linearTrain(TypeId id,Integer count,Integer mode){
     if(!linearIsValid(id)) return;
 
