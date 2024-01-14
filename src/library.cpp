@@ -85,9 +85,9 @@ void mlpPropagate(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool
 	(*s_MLPs)[id]->Propagate(rawInputs ,rawInputsCount ,isClassification);
 }
 
-Real mlpPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification)
+const Real* mlpPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification)
 {
-	if(!mlpIsValid(id)) return -1.0;
+	if(!mlpIsValid(id)) return nullptr;
 
 	return (*s_MLPs)[id]->Predict(rawInputs, rawInputsCount , isClassification);
 }
