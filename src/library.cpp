@@ -35,8 +35,21 @@ void update(Real timestep)
 void shutdown()
 {
 	ML_LOG("Shutdown");
-	delete s_MLPs;
-    delete s_Linears;
+	if(s_MLPs)
+	{
+		for (auto ptr : (*s_MLPs)) {
+			delete ptr;
+		}
+		delete s_MLPs;
+	}
+
+    if(s_Linears)
+	{
+		for (auto ptr : (*s_Linears)) {
+			delete ptr;
+		}
+		delete s_Linears;
+	}
 }
 
 TypeId mlpCreate(const Integer* entries, Integer count)
