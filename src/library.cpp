@@ -7,10 +7,12 @@
 
 using namespace GG::ML;
 
-static TypeId s_MLPId = 0;
-static TypeId s_LinearId = 0;
+//static TypeId s_MLPId = 0;
+//static TypeId s_LinearId = 0;
 static std::vector<MultiLayerPerceptron*>* s_MLPs = nullptr;
 static std::vector<LinearModel*>* s_Linears = nullptr;
+
+#define ML_LOG(str) std::cout << str << std::endl
 
 int infos()
 {
@@ -20,16 +22,9 @@ int infos()
 
 void initialize()
 {
+	ML_LOG("Initialize");
 	s_MLPs = new std::vector<MultiLayerPerceptron *>();
     s_Linears = new std::vector<LinearModel*>();
-	for (int i = 0; i < s_MLPId; ++i)
-	{
-		s_MLPs->push_back(nullptr);
-	}
-    for (int i = 0; i < s_LinearId; ++i)
-    {
-        s_Linears->push_back(nullptr);
-    }
 }
 
 void update(Real timestep)
@@ -39,39 +34,41 @@ void update(Real timestep)
 
 void shutdown()
 {
+	ML_LOG("Shutdown");
 	delete s_MLPs;
-	s_MLPId = 0;
     delete s_Linears;
-    s_LinearId = 0;
 }
 
 TypeId mlpCreate(const Integer* entries, Integer count)
 {
-	if(!s_MLPs) return s_MLPId++;
-	TypeId id = s_MLPId++;
+	if(!s_MLPs) return -1;
 	s_MLPs->push_back(new MultiLayerPerceptron(entries, count));
-	return id;
+	auto index = s_MLPs->size() - 1;
+	ML_LOG("Create mlp at index '" << std::to_string(index) << "'");
+	return index;
 }
 TypeId linearCreate(Real step,const Real* entries, const Real*output,Integer entrySize, Integer entryCount){
-    if(!s_Linears) return s_LinearId++;
-    TypeId  id = s_LinearId++;
-    s_Linears->push_back(new LinearModel(step,entries,output,entrySize,entryCount));
-    return id;
+	if(!s_Linears) return -1;
+	s_Linears->push_back(new LinearModel(step,entries,output,entrySize,entryCount));
+	auto index = s_Linears->size() - 1;
+	ML_LOG("Create linear at index '" << std::to_string(index) << "'");
+    return index;
 }
 
+
+bool linearIsValid(TypeId id)
+{
+	return s_Linears && id >= 0 && id < (*s_Linears).size() && (*s_Linears)[id];
+}
 
 bool mlpIsValid(TypeId id)
 {
-	return s_Linears && id < s_LinearId && (*s_Linears)[id];
-}
-bool linearIsValid(TypeId id)
-{
-    return s_MLPs && id < s_MLPId && (*s_MLPs)[id];
+    return s_MLPs && id >= 0 && id < (*s_MLPs).size() && (*s_MLPs)[id];
 }
 
 void mlpDelete(TypeId id)
 {
-	if(!mlpIsValid(id)) return;
+	if(!mlpIsValid(id)){ML_LOG("'mlpDelete' - id '" << std::to_string(id) << "' doesn't exist."); return;}
 
 	delete (*s_MLPs)[id];
 	(*s_MLPs)[id] = nullptr;
@@ -80,43 +77,47 @@ void mlpDelete(TypeId id)
 
 void mlpPropagate(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification)
 {
-	if(!mlpIsValid(id)) return;
+	if(!mlpIsValid(id)){ML_LOG("'mlpPropagate' - id '" << std::to_string(id) << "' doesn't exist."); return;}
 
 	(*s_MLPs)[id]->Propagate(rawInputs ,rawInputsCount ,isClassification);
 }
 
 Integer mlpPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification)
 {
-	if(!mlpIsValid(id)) return 0;
+	if(!mlpIsValid(id)){ML_LOG("'mlpPredict' - id '" << std::to_string(id) << "' doesn't exist."); return 0;}
 
-	return (*s_MLPs)[id]->Predict(rawInputs, rawInputsCount , isClassification);
+	auto val = (*s_MLPs)[id]->Predict(rawInputs, rawInputsCount , isClassification);
+	ML_LOG("mlp predict count : " << std::to_string(val));
+	return val;
 }
 
 Real mlpGetPredictData(TypeId id, Integer index)
 {
-	if(!mlpIsValid(id)) return 0;
-	return (*s_MLPs)[id]->GetPredictData(index);
+	if(!mlpIsValid(id)){ML_LOG("'mlpGetPredictData' - id '" << std::to_string(id) << "' doesn't exist."); return 0;}
+	auto val = (*s_MLPs)[id]->GetPredictData(index);
+	ML_LOG("mlp predict data at index '" << std::to_string(index) << "' : " << std::to_string(val));
+	return val;
 }
 
 void mlpTrain(TypeId id, const Real* rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight, const Real* rawExcpectedOutputs, Integer rawExcpectedOutputsWidth, Integer rawExcpectedOutputsHeight, bool isClassification, float alpha, Integer maxIter)
 {
-	if(!mlpIsValid(id)) return;
+	if(!mlpIsValid(id)){ML_LOG("'mlpTrain' - id '" << std::to_string(id) << "' doesn't exist."); return;}
 
 	(*s_MLPs)[id]->Train(rawAllInputs , rawAllInputsWidth , rawAllInputsHeight , rawExcpectedOutputs , rawExcpectedOutputsWidth , rawExcpectedOutputsHeight , isClassification , alpha , maxIter);
 }
 
 void linearTrain(TypeId id,Integer count,Integer mode){
-    if(!linearIsValid(id)) return;
+    if(!linearIsValid(id)){ML_LOG("'linearTrain' - id '" << std::to_string(id) << "' doesn't exist."); return;}
 
     (*s_Linears)[id]->Train(count,mode);
 }
 Real linearEvaluate(TypeId id,const Real* entries){
-    if(!linearIsValid(id)) return 0.0;
+    if(!linearIsValid(id)){ML_LOG("'linearEvaluate' - id '" << std::to_string(id) << "' doesn't exist."); return 0.0;}
     return (*s_Linears)[id]->predict(entries);
 }
 void linearDelete(TypeId id)
 {
-    if(!linearIsValid(id)) return;
+    if(!linearIsValid(id)){ML_LOG("'linearDelete' - id '" << std::to_string(id) << "' doesn't exist."); return;}
 
     delete (*s_Linears)[id];
     (*s_Linears)[id] = nullptr;
