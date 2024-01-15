@@ -144,7 +144,7 @@ def MultiCross(libc, useMLP, width_size=1, height_size=1, width_points=100, heig
 
 # Regression
 
-def LinearSimple2D(libc, useMLP, width_size=2, height_size=3, width_points=100, height_points=100, False):
+def LinearSimple2D(libc, useMLP, width_size=2, height_size=3, width_points=100, height_points=100):
     X = np.array([
         [1],
         [2]
@@ -155,13 +155,13 @@ def LinearSimple2D(libc, useMLP, width_size=2, height_size=3, width_points=100, 
     ], np.float64)
 
     entries = np.array([1, 1], np.int32)
-    Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points)
+    Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points, False)
 
     plt.scatter(X, Y)
     Show('Linear Simple 2D')
 
 
-def NonLinearSimple2D(libc, useMLP, width_size=3, height_size=3, width_points=100, height_points=100, False):
+def NonLinearSimple2D(libc, useMLP, width_size=3, height_size=3, width_points=100, height_points=100):
     X = np.array([
         [1],
         [2],
@@ -175,13 +175,13 @@ def NonLinearSimple2D(libc, useMLP, width_size=3, height_size=3, width_points=10
 
     # Note: L'exemple stipule MLP (1, ?, 1)... good luck
     entries = np.array([1, 2, 1], np.int32)
-    Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points)
+    Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points, False)
 
     plt.scatter(X, Y)
     Show('Non Linear Simple 2D')
 
 # Note: les graphs 3d sont broken (Montre un graph 2d + un graph 3d
-def LinearSimple3D(libc, useMLP, width_size=3, height_size=3, width_points=100, height_points=100, False):
+def LinearSimple3D(libc, useMLP, width_size=3, height_size=3, width_points=100, height_points=100):
     X = np.array([
         [1, 1],
         [2, 2],
