@@ -8,7 +8,9 @@ def Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, 
 
     if useMLP:
         idMLP = libc.mlpCreate(entries, entries.size)
-        libc.mlpTrain(idMLP, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], isClassification, 1, nbIteration)
+        #void mlpTrain(TypeId id, const Real* rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight, const Real* rawExcpectedOutputs, Integer rawExcpectedOutputsWidth, Integer rawExcpectedOutputsHeight, bool isClassification = true, float alpha = 0.01f, Integer maxIter = 1000);
+
+        libc.mlpTrain(idMLP, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], isClassification, 0.1, nbIteration)
         for input_x in test_X:
             predictCount = libc.mlpPredict(idMLP, input_x.ravel(), input_x.ravel().size, False)
             test_colors.append('lightblue' if libc.mlpGetPredictData(idMLP, 0) >= 0 else 'pink')

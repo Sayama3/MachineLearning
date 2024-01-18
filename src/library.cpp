@@ -100,7 +100,7 @@ Integer mlpPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount, boo
 	if(!mlpIsValid(id)){ML_LOG("'mlpPredict' - id '" << std::to_string(id) << "' doesn't exist."); return 0;}
 
 	auto val = (*s_MLPs)[id]->Predict(rawInputs, rawInputsCount , isClassification);
-	ML_LOG("mlp predict count : " << std::to_string(val));
+	//ML_LOG("mlp predict count : " << std::to_string(val));
 	return val;
 }
 
@@ -108,11 +108,11 @@ Real mlpGetPredictData(TypeId id, Integer index)
 {
 	if(!mlpIsValid(id)){ML_LOG("'mlpGetPredictData' - id '" << std::to_string(id) << "' doesn't exist."); return 0;}
 	auto val = (*s_MLPs)[id]->GetPredictData(index);
-	ML_LOG("mlp predict data at index '" << std::to_string(index) << "' : " << std::to_string(val));
+	//ML_LOG("mlp predict data at index '" << std::to_string(index) << "' : " << std::to_string(val));
 	return val;
 }
 
-void mlpTrain(TypeId id, const Real* rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight, const Real* rawExcpectedOutputs, Integer rawExcpectedOutputsWidth, Integer rawExcpectedOutputsHeight, bool isClassification, float alpha, Integer maxIter)
+void mlpTrain(TypeId id, const Real* rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight, const Real* rawExcpectedOutputs, Integer rawExcpectedOutputsWidth, Integer rawExcpectedOutputsHeight, bool isClassification, Real alpha, Integer maxIter)
 {
 	if(!mlpIsValid(id)){ML_LOG("'mlpTrain' - id '" << std::to_string(id) << "' doesn't exist."); return;}
 

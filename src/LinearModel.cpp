@@ -29,7 +29,7 @@ Real LinearModel::predict(const std::vector<Real> x) {
 void LinearModel::trainOnceRosenblatt(std::vector<Real> input,Real expected){
     auto p=predict(input);
     Real dist=step*(expected - p);
-//std::cout<<input[0]<<","<<input[1]<<"Training"<<expected<<" vs "<<p<<" inp "<<input[2]<<std::endl;
+    //std::cout<<input[0]<<","<<input[1]<<"Training"<<expected<<" vs "<<p<<" inp "<<input[2]<<std::endl;
     weight[0]=weight[0]+dist*1;
     for (int i = 1; i < weight.size(); ++i) {
         weight[i] = weight[i] + dist * input[i - 1];

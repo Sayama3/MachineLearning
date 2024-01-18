@@ -50,7 +50,8 @@ libc.mlpCreate.restype = INT
 #	ML_API void mlpPropagate(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification);
 # libc.mlpPropagate.argtypes = [INT,ND_POINTER_FLOAT,INT,ctypes.c_bool]
 
-#	ML_API void mlpTrain(TypeId id, const Real* rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight, const Real* rawExcpectedOutputs, Integer rawExcpectedOutputsWidth, Integer rawExcpectedOutputsHeight, bool isClassification = true, float alpha = 0.01f, Integer maxIter = 1000);
+#void mlpTrain(TypeId id, const Real* rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight, const Real* rawExcpectedOutputs, Integer rawExcpectedOutputsWidth, Integer rawExcpectedOutputsHeight, bool isClassification = true, float alpha = 0.01f, Integer maxIter = 1000);
+
 libc.mlpTrain.argtypes = [INT, ND_POINTER_FLOAT, INT, INT, ND_POINTER_FLOAT, INT, INT, ctypes.c_bool, REAL, INT]
 
 # 	ML_API Real mlpPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification = true);
@@ -76,10 +77,10 @@ libc.linearDelete.argtypes = [INT]
 libc.initialize()
 
 # Execute test functions
-TestFunctions.nbIteration=250
-#TestFunctions.LinearSimple(libc, False)
+TestFunctions.nbIteration=100
+TestFunctions.LinearSimple(libc, True)
 TestFunctions.nbIteration=750
-TestFunctions.LinearMultiple(libc, False)
+#TestFunctions.LinearMultiple(libc, False)
 #Dimensions of entry vector causes crash for those two ?
 #TestFunctions.LinearSimple2D(libc, False)
 #TestFunctions.LinearSimple3D(libc, False)
