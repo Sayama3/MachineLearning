@@ -122,7 +122,7 @@ void linearTrain(TypeId id,Integer count,const Real* entries, const Real* output
 {
     if(!linearIsValid(id)){ML_LOG("'linearTrain' - id '" << std::to_string(id) << "' doesn't exist."); return;}
 
-    (*s_Linears)[id]->Train(count,entries,output,entryCount);
+    (*s_Linears)[id]->train(count,entries,output,entryCount);
 }
 Real linearEvaluate(TypeId id,const Real* entries){
     if(!linearIsValid(id)){ML_LOG("'linearEvaluate' - id '" << std::to_string(id) << "' doesn't exist."); return 0.0;}
