@@ -11,13 +11,13 @@ def Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, 
         libc.mlpTrain(idMLP, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], isClassification, 1, 1000)
         for input_x in test_X:
             predictCount = libc.mlpPredict(idMLP, input_x.ravel(), input_x.ravel().size, False)
-            test_colors.append('pink' if libc.mlpGetPredictData(idMLP, 0) >= 0 else 'lightblue')
+            test_colors.append('lightblue' if libc.mlpGetPredictData(idMLP, 0) >= 0 else 'pink')
         libc.mlpDelete(idMLP)
 
     else:
         idLinear = libc.linearCreate(isClassification,0.01, np.shape(X)[1])
-        libc.linearTrain(idLinear, 500,X.ravel(), Y.ravel(), np.shape(X)[0])
-        test_colors = ['pink' if libc.linearEvaluate(idLinear, input_x) >= 0 else 'lightblue' for input_x in test_X]
+        libc.linearTrain(idLinear, 250,X.ravel(), Y.ravel(), np.shape(X)[0])
+        test_colors = ['lightblue' if libc.linearEvaluate(idLinear, input_x) >= 0 else 'pink' for input_x in test_X]
         libc.linearDelete(idLinear)
 
     # Show prediction
