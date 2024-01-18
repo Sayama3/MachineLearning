@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+nbIteration=250;
 def Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, height_points, isClassification = True):
 
     test_X = np.array([[(w / width_points) * width_size, (h / height_points) * height_size] for w in range(0, width_points) for h in range(0, height_points)], np.float64)
@@ -8,7 +8,7 @@ def Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, 
 
     if useMLP:
         idMLP = libc.mlpCreate(entries, entries.size)
-        libc.mlpTrain(idMLP, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], isClassification, 1, 1000)
+        libc.mlpTrain(idMLP, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], isClassification, 1, nbIteration)
         for input_x in test_X:
             predictCount = libc.mlpPredict(idMLP, input_x.ravel(), input_x.ravel().size, False)
             test_colors.append('lightblue' if libc.mlpGetPredictData(idMLP, 0) >= 0 else 'pink')
@@ -16,7 +16,7 @@ def Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, 
 
     else:
         idLinear = libc.linearCreate(isClassification,0.01, np.shape(X)[1])
-        libc.linearTrain(idLinear, 250,X.ravel(), Y.ravel(), np.shape(X)[0])
+        libc.linearTrain(idLinear, nbIteration,X.ravel(), Y.ravel(), np.shape(X)[0])
         test_colors = ['lightblue' if libc.linearEvaluate(idLinear, input_x) >= 0 else 'pink' for input_x in test_X]
         libc.linearDelete(idLinear)
 

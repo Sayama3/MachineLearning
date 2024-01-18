@@ -76,7 +76,9 @@ libc.linearDelete.argtypes = [INT]
 libc.initialize()
 
 # Execute test functions
+TestFunctions.nbIteration=250
 #TestFunctions.LinearSimple(libc, False)
+TestFunctions.nbIteration=750
 TestFunctions.LinearMultiple(libc, False)
 #Dimensions of entry vector causes crash for those two ?
 #TestFunctions.LinearSimple2D(libc, False)
