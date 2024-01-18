@@ -39,6 +39,7 @@ libc = cdll.LoadLibrary(dllPath)
 # Function prototypes
 INT = ctypes.wintypes.INT
 REAL = ctypes.c_double
+BOOL = ctypes.c_bool
 
 ND_POINTER_INT = np.ctypeslib.ndpointer(dtype=np.int32, ndim=1, flags="C")
 ND_POINTER_FLOAT = np.ctypeslib.ndpointer(REAL, ndim=1, flags="C")
@@ -53,19 +54,18 @@ libc.mlpCreate.restype = INT
 libc.mlpTrain.argtypes = [INT, ND_POINTER_FLOAT, INT, INT, ND_POINTER_FLOAT, INT, INT, ctypes.c_bool, REAL, INT]
 
 # 	ML_API Real mlpPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification = true);
-libc.mlpPredict.argtypes = [ctypes.wintypes.INT, ND_POINTER_FLOAT, ctypes.wintypes.INT, ctypes.c_bool]
+libc.mlpPredict.argtypes = [ctypes.wintypes.INT, ND_POINTER_FLOAT, ctypes.wintypes.INT, BOOL]
 libc.mlpPredict.restype = INT
 
 # 	ML_API Real mlpGetPredictData(TypeId id, Integer index);
 libc.mlpGetPredictData.argtypes = [ctypes.wintypes.INT, ctypes.wintypes.INT]
 libc.mlpGetPredictData.restype = ctypes.wintypes.DOUBLE
-
-#     ML_API TypeId linearCreate(Real step,const Real* entries, const Real*output,Integer entrySize, Integer entryCount);
-libc.linearCreate.argtypes = [REAL, ND_POINTER_FLOAT, ND_POINTER_FLOAT, INT, INT]
+#ML_API TypeId linearCreate(bool isClassification,Real step,Integer entrySize);
+libc.linearCreate.argtypes = [BOOL, REAL, INT]
 libc.linearCreate.restype = INT
 
-#     ML_API void linearTrain(TypeId id,Integer count,Integer mode);
-libc.linearTrain.argtypes = [INT, INT, INT]
+#ML_API void linearTrain(TypeId id,Integer count,const Real* entries, const Real* output, Integer entryCount);
+libc.linearTrain.argtypes = [INT, INT,ND_POINTER_FLOAT, ND_POINTER_FLOAT, INT ]
 
 #     ML_API Real linearEvaluate(TypeId id,const Real* entries);
 libc.linearEvaluate.argtypes = [INT, ND_POINTER_FLOAT]
@@ -76,7 +76,7 @@ libc.linearDelete.argtypes = [INT]
 libc.initialize()
 
 # Execute test functions
-TestFunctions.LinearSimple(libc, True)
+TestFunctions.LinearSimple(libc, False)
 
 libc.shutdown()
 

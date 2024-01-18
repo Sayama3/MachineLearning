@@ -15,8 +15,8 @@ def Predict(libc, useMLP, entries, X, Y, width_size, height_size, width_points, 
         libc.mlpDelete(idMLP)
 
     else:
-        idLinear = libc.linearCreate(1, X.ravel(), Y.ravel(), np.shape(X)[1], np.shape(X)[0])
-        libc.linearTrain(idLinear, 5000, 0)
+        idLinear = libc.linearCreate(isClassification,0.01, np.shape(X)[1])
+        libc.linearTrain(idLinear, 500,X.ravel(), Y.ravel(), np.shape(X)[0])
         test_colors = ['pink' if libc.linearEvaluate(idLinear, input_x) >= 0 else 'lightblue' for input_x in test_X]
         libc.linearDelete(idLinear)
 

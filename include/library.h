@@ -24,8 +24,9 @@ extern "C"
 	ML_API void mlpTrain(TypeId id, const Real* rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight, const Real* rawExcpectedOutputs, Integer rawExcpectedOutputsWidth, Integer rawExcpectedOutputsHeight, bool isClassification = true, float alpha = 0.01f, Integer maxIter = 1000);
 
 	ML_API bool linearIsValid(TypeId id);
-    ML_API TypeId linearCreate(Real step,const Real* entries, const Real*output,Integer entrySize, Integer entryCount);
-    ML_API void linearTrain(TypeId id,Integer count,Integer mode);
+    ML_API TypeId linearCreate(bool isClassification,Real step,Integer entrySize);
+    ML_API void linearTrain(TypeId id,Integer count,const Real* entries, const Real* output, Integer entryCount);
+
     ML_API Real linearEvaluate(TypeId id,const Real* entries);
     ML_API void linearDelete(TypeId id);
 

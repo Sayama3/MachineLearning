@@ -60,9 +60,9 @@ TypeId mlpCreate(const Integer* entries, Integer count)
 	ML_LOG("Create mlp at index '" << std::to_string(index) << "'");
 	return index;
 }
-TypeId linearCreate(Real step,const Real* entries, const Real*output,Integer entrySize, Integer entryCount){
+TypeId linearCreate(bool isClassification,Real step,Integer entrySize){
 	if(!s_Linears) return -1;
-	s_Linears->push_back(new LinearModel(step,entries,output,entrySize,entryCount));
+	s_Linears->push_back(new LinearModel(isClassification,step,entrySize));
 	auto index = s_Linears->size() - 1;
 	ML_LOG("Create linear at index '" << std::to_string(index) << "'");
     return index;
@@ -118,11 +118,11 @@ void mlpTrain(TypeId id, const Real* rawAllInputs, Integer rawAllInputsWidth, In
 
 	(*s_MLPs)[id]->Train(rawAllInputs , rawAllInputsWidth , rawAllInputsHeight , rawExcpectedOutputs , rawExcpectedOutputsWidth , rawExcpectedOutputsHeight , isClassification , alpha , maxIter);
 }
-
-void linearTrain(TypeId id,Integer count,Integer mode){
+void linearTrain(TypeId id,Integer count,const Real* entries, const Real* output, Integer entryCount)
+{
     if(!linearIsValid(id)){ML_LOG("'linearTrain' - id '" << std::to_string(id) << "' doesn't exist."); return;}
 
-    (*s_Linears)[id]->Train(count,mode);
+    (*s_Linears)[id]->Train(count,entries,output,entryCount);
 }
 Real linearEvaluate(TypeId id,const Real* entries){
     if(!linearIsValid(id)){ML_LOG("'linearEvaluate' - id '" << std::to_string(id) << "' doesn't exist."); return 0.0;}
