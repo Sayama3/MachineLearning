@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
-nbIteration=250;
-def Predict(libc, useMLP, isClassification, entries, X, Y, width_size, height_size, resolution):
+nbIteration=250
+def Predict(libc, useMLP : bool, isClassification : bool, entries, X, Y, width_size : int, height_size : int, resolution : int, width_offset = 0, height_offset = 0):
 
-    test_X = np.array([[(w / resolution) * width_size, (h / resolution) * height_size] for w in range(0, resolution) for h in range(0, resolution)], np.float64)
+    test_X = np.array([[(w / resolution) * width_size + width_offset, (h / resolution) * height_size + height_offset] for w in range(0, resolution) for h in range(0, resolution)], np.float64)
     test_colors = []
 
     if useMLP:
@@ -46,7 +46,7 @@ def LinearSimple(libc, useMLP, width_size=4, height_size=4, resolution=100):
     Show('Linear simple')
 
 # Note: Pas très bien zoomé
-def LinearMultiple(libc, useMLP, width_size=3, height_size=3, resolution=100):
+def LinearMultiple(libc, useMLP, width_size=2, height_size=2, resolution=100, width_offset = 1, height_offset = 1):
     X = np.concatenate([np.random.random((50, 2)) * 0.9 + np.array([1, 1]), np.random.random((50, 2)) * 0.9 + np.array([2, 2])])
     Y = np.concatenate([np.ones((50, 1)), np.ones((50, 1)) * -1.0])
 
@@ -54,7 +54,7 @@ def LinearMultiple(libc, useMLP, width_size=3, height_size=3, resolution=100):
     Y.astype(np.float64)
 
     entries = np.array([2, 1], np.int32)
-    Predict(libc, useMLP, True, entries, X, Y, width_size, height_size, resolution)
+    Predict(libc, useMLP, True, entries, X, Y, width_size, height_size, resolution, width_offset, height_offset)
 
     plt.scatter(X[0:50, 0], X[0:50, 1], color='blue')
     plt.scatter(X[50:100, 0], X[50:100, 1], color='red')
@@ -73,14 +73,14 @@ def XOR(libc, useMLP, width_size=1, height_size=1, width_points=100, resolution=
     Show('XOR')
 
 
-def Cross(libc, useMLP, width_size=1, height_size=1, resolution=100):
+def Cross(libc, useMLP, width_size=2, height_size=2, resolution=100, width_offset = -1, height_offset = -1):
     X = np.random.random((500, 2)) * 2.0 - 1.0
     Y = np.array([1 if abs(p[0]) <= 0.3 or abs(p[1]) <= 0.3 else -1 for p in X], np.float64)
 
     X.astype(np.float64)
 
     entries = np.array([2, 4, 1], np.int32)
-    Predict(libc, useMLP, True, entries, X, Y, width_size, height_size, resolution)
+    Predict(libc, useMLP, True, entries, X, Y, width_size, height_size, resolution, width_offset, height_offset)
 
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]] == 1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]] == 1, enumerate(X)))))[:, 1],
@@ -91,7 +91,7 @@ def Cross(libc, useMLP, width_size=1, height_size=1, resolution=100):
     Show('Cross')
 
 
-def MultiLinear3Classes(libc, useMLP, width_size=1, height_size=1, resolution=100):
+def MultiLinear3Classes(libc, useMLP, width_size=2, height_size=2, resolution=100, width_offset = -1, height_offset = -1):
     X = np.random.random((500, 2)) * 2.0 - 1.0
     Y = np.array([[1, 0, 0] if -p[0] - p[1] - 0.5 > 0 > p[1] and p[0] - p[1] - 0.5 < 0 else
                   [0, 1, 0] if -p[0] - p[1] - 0.5 < 0 < p[1] and p[0] - p[1] - 0.5 < 0 else
@@ -105,7 +105,7 @@ def MultiLinear3Classes(libc, useMLP, width_size=1, height_size=1, resolution=10
     Y.astype(np.float64)
 
     entries = np.array([2, 3], np.int32)
-    Predict(libc, useMLP, True, entries, X, Y, width_size, height_size, resolution)
+    Predict(libc, useMLP, True, entries, X, Y, width_size, height_size, resolution, width_offset, height_offset)
 
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][0] == 1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][0] == 1, enumerate(X)))))[:, 1],
@@ -119,7 +119,7 @@ def MultiLinear3Classes(libc, useMLP, width_size=1, height_size=1, resolution=10
     Show('Multi linear 3 classes')
 
 
-def MultiCross(libc, useMLP, width_size=1, height_size=1, resolution=100):
+def MultiCross(libc, useMLP, width_size=2, height_size=2, resolution=100, width_offset = -1, height_offset = -1):
     X = np.random.random((1000, 2)) * 2.0 - 1.0
     Y = np.array([[1, 0, 0] if abs(p[0] % 0.5) <= 0.25 < abs(p[1] % 0.5) else [0, 1, 0] if abs(
         p[0] % 0.5) > 0.25 >= abs(p[1] % 0.5) else [0, 0, 1] for p in X], np.float64)
@@ -128,7 +128,7 @@ def MultiCross(libc, useMLP, width_size=1, height_size=1, resolution=100):
 
     # Note: L'exemple stipule MLP (2, ?, ?, 3)... good luck
     entries = np.array([2, 3, 3, 3], np.int32)
-    Predict(libc, useMLP, True, entries, X, Y, width_size, height_size, resolution)
+    Predict(libc, useMLP, True, entries, X, Y, width_size, height_size, resolution, width_offset, height_offset)
 
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][0] == 1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][0] == 1, enumerate(X)))))[:, 1],

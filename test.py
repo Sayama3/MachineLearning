@@ -77,7 +77,7 @@ libc.initialize()
 
 # Execute test functions
 TestFunctions.nbIteration=750
-TestFunctions.AllGraphs(libc, False)
+TestFunctions.LinearMultiple(libc, False)
 #Dimensions of entry vector causes crash for those two ?
 #TestFunctions.LinearSimple2D(libc, False)
 #TestFunctions.LinearSimple3D(libc, False)
