@@ -175,7 +175,7 @@ namespace GG::ML {
                 }
 			}
             //Helper cout loop
-            for (int l = 0; l < m_L+1; ++l){
+            /*for (int l = 0; l < m_L+1; ++l){
                 for(int j=0;j<m_D[l]+1;++j){
                     if(l<m_L || isClassification)
                         std::cout<<std::tanh(m_X[l][j]);
@@ -190,7 +190,7 @@ namespace GG::ML {
                     }
                 }
                 std::cout<<std::endl;
-            }
+            }*/
 
 
             for (int l = 1; l < m_L + 1; ++l)
