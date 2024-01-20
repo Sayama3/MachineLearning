@@ -87,7 +87,7 @@ namespace GG::ML {
 	Real MultiLayerPerceptron::GetPredictData(Integer index)
 	{
 		auto& arr = m_X[m_L];
-		return arr[index + 1];
+		return arr[index];
 	}
 
 	void MultiLayerPerceptron::Propagate(const std::vector<Real>& inputs, bool isClassification)
@@ -97,7 +97,7 @@ namespace GG::ML {
 			m_X[0][j] = inputs[j - 1];
 		}
 
-		for (Integer l = 1; l < m_D.size(); ++l)
+		for (Integer l = 1; l < m_L+1; ++l)
 		{
 			for (Integer j = 1; j < m_D[l] + 1; ++j)
 			{
@@ -175,17 +175,22 @@ namespace GG::ML {
                 }
 			}
             //Helper cout loop
-            /*for (int l = 0; l < m_L+1; ++l){
+            for (int l = 0; l < m_L+1; ++l){
                 for(int j=0;j<m_D[l]+1;++j){
-                    std::cout<<std::tanh(3*(m_W[1][0][1]+m_W[1][1][1]+m_W[1][2][1]))<<" Value of x : " << m_X[l][j] << " ("<<l<<","<< j<<") / ("<<m_L+1-1 << " / "<<m_D[l] + 1-1<<")"<<std::endl;
+                    if(l<m_L || isClassification)
+                        std::cout<<std::tanh(m_X[l][j]);
+                    else
+                        std::cout<<m_X[l][j];
+                    std::cout<<std::endl;
+                    std::cout<<" Value of x : " << m_X[l][j] << " ("<<l<<","<< j<<") / ("<<m_L+1-1 << " / "<<m_D[l] + 1-1<<")"<<std::endl;
                     if(l>0 && j>0){
                         for (int i = 0; i < m_D[l-1] + 1; ++i) {
-                            std::cout << "Weight : "<<m_W[l][i][j] << "(" << l << "," << i << "," << j << ")=";
+                            std::cout << "Weight : "<<m_W[l][i][j] << "(" << l << "," << i << "," << j << "),";
                         }
                     }
                 }
                 std::cout<<std::endl;
-            }*/
+            }
 
 
             for (int l = 1; l < m_L + 1; ++l)
