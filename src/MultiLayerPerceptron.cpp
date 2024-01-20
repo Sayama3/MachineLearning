@@ -92,7 +92,7 @@ namespace GG::ML {
 
 	void MultiLayerPerceptron::Propagate(const std::vector<Real>& inputs, bool isClassification)
 	{
-		for (Integer j = 0; j < m_D[0] + 1; ++j)
+		for (Integer j = 1; j < m_D[0] + 1; ++j)
 		{
 			m_X[0][j] = inputs[j - 1];
 		}
@@ -104,6 +104,9 @@ namespace GG::ML {
 				Real sum = 0;
                 for (Integer i = 0; i < m_D[l - 1] + 1; ++i)
 				{
+                    if(i==0 && std::abs( m_X[l - 1][i]) > std::pow(10, -200)){
+                        //std::cout << "Bias value > 0 " << m_X[l - 1][i];
+                    }
                     sum += m_W[l][i][j] * m_X[l - 1][i];
 				}
 				if(l < m_L || isClassification)
@@ -142,7 +145,10 @@ namespace GG::ML {
 				if(isClassification)
 				{
 					m_Deltas[m_L][j] *= (1 - (m_X[m_L][j] * m_X[m_L][j]));
-				}
+                    std::cout<<m_L<<"/"<<m_D[m_L] + 1<< " l,j "<<j<<"/"<<m_D[m_L] + 1;
+                    std::cout<<";;"<<"delta : "<< m_Deltas[m_L][j]<<std::endl;
+
+                }
 			}
 
 			for (Integer l = m_L; l >= 2; --l)
@@ -150,7 +156,6 @@ namespace GG::ML {
 				for (int i = 1; i < m_D[l - 1] + 1; ++i)
 				{
 					Real sum = 0.0;
-                    std::cout<<l<<"/"<<m_D[l] + 1<< " l,i "<<i<<"/"<<m_D[l - 1] + 1<<" j :";
                     for (int j = 1; j < m_D[l] + 1; ++j)
 					{
                         std::cout<<j<<" weight ; "<<m_W[l][i][j];
@@ -161,20 +166,27 @@ namespace GG::ML {
                     std::cout<<";;"<<sum<<" sum, delta"<< m_Deltas[l - 1][i]<<std::endl;
                 }
 			}
-
-			for (int l = 1; l < m_L + 1; ++l)
+            for (int l = 0; l < m_L+1; ++l)
+                for (int i = 0; i < m_D[l] + 1; ++i)
+                    std::cout<<"Value of x : " << m_X[l][i] << "with : "<<l<<" / "<<m_L+1-1<<","<< i << " / "<<m_D[l] + 1-1<<";;;";
+            std::cout<<std::endl;
+            for (int l = 1; l < m_L + 1; ++l)
 			{
 				for (int i = 0; i < m_D[l - 1] + 1; ++i)
 				{
 					for (int j = 1; j < m_D[l] + 1; ++j)
 					{
-                        m_W[l][i][j] -= alpha * (m_X[l - 1][i] * m_Deltas[l][j]);
-                        std::cout<<l<<"/"<<m_L+1<< " l,i "<<i<<"/"<<m_D[l - 1] + 1<<" j :"<< j<<"/"<<m_D[l] + 1
-                        <<alpha<<" : alpha "<<m_Deltas[l][j]<<": Delta "<<m_X[l - 1][i]<<" : value"<<
-                        (alpha * (m_X[l - 1][i] * m_Deltas[l][j]))<<": weightChange"
-
-                        << "Final weight : "<<m_W[l][i][j]
-                        <<std::endl;
+                        const Real x = m_X[l - 1][i];
+                        m_W[l][i][j] -= alpha * (x * m_Deltas[l][j]);
+                        std::cout << l << "/" <<m_L+1-1 << " l,i " << i << "/" <<m_D[l - 1] + 1-1 << " j :" << j << "/" <<m_D[l] + 1-1<< std::endl;
+                        if(i==0 && std::abs(x) > std::pow(10, -200)){
+                            std::cout << "Bias value > 0 " << x;
+                        }
+                        std::cout<< alpha << " : alpha " << m_Deltas[l][j] << ": Delta " << x
+                        << " : value " <<
+                        (alpha * (x * m_Deltas[l][j])) << ": weightChange"
+                        << "Final weight : " << m_W[l][i][j]
+                        << std::endl;
                     }
 				}
 			}
