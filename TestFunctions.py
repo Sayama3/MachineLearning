@@ -21,9 +21,10 @@ def Predict(libc, useMLP : bool, isClassification : bool, entries, X, Y, width_s
             if isClassification:
                 test_colors.append('lightblue' if f >= 0 else 'pink')
             else:
-                print(f)
+                #print("Ouptputed : ")
+                #print(f)
                 test_Y.append(f)
-                test_colors.append([1.0,1.0,1.0])
+                test_colors.append([0.5,0.5,0.5])
         libc.mlpDelete(idMLP)
 
     else:
