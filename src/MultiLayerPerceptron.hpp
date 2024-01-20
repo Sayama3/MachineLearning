@@ -27,7 +27,7 @@ namespace GG::ML {
 		void Propagate(const Real* rawInputs, Integer rawInputsCount, bool isClassification);
 		Integer Predict(const Real* rawInputs, Integer rawInputsCount, bool isClassification = true);
 		Real GetPredictData(Integer index);
-		void Train(const Real* rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight, const Real* rawExcpectedOutputs, Integer rawExcpectedOutputsWidth, Integer rawExcpectedOutputsHeight, bool isClassification = true, Real alpha = 0.01f, Integer maxIter = 1000);
+		void Train(const Real* rawAllInputs, Integer inputSize, Integer inputsCount, const Real* rawExcpectedOutputs, Integer outputSize, Integer outputsCount, bool isClassification = true, Real alpha = 0.01f, Integer maxIter = 1000);
 
 	private:
 		void Propagate(const std::vector<Real>& inputs, bool isClassification);

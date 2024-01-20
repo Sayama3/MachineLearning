@@ -125,28 +125,36 @@ namespace GG::ML {
 		return static_cast<Integer>(arr.size()) - 1;
 	}
 
-	void MultiLayerPerceptron::Train(const Real *rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight,
-									 const Real *rawExpectedOutputs, Integer rawExpectedOutputsWidth, Integer rawExpectedOutputsHeight,
-									 bool isClassification, Real alpha, Integer maxIter)
+	void MultiLayerPerceptron::Train(const Real *rawAllInputs, Integer inputSize, Integer inputsCount,
+                                     const Real *rawExpectedOutputs, Integer outputSize, Integer outputsCount,
+                                     bool isClassification, Real alpha, Integer maxIter)
 	{
-		Vector2D<Real> allInputs(rawAllInputs, rawAllInputsWidth, rawAllInputsHeight);
-		Vector2D<Real> expectedOutputs(rawExpectedOutputs, rawExpectedOutputsWidth, rawExpectedOutputsHeight);
+		//Vector2D<Real> allInputs(rawAllInputs, inputSize, inputsCount);
+		//Vector2D<Real> expectedOutputs(rawExpectedOutputs, outputSize, outputsCount);
 
 		for (Integer iter = 0; iter < maxIter; ++iter)
 		{
-            std::cout<<std::endl<<m_L<<std::endl;
-			Integer k = static_cast<Integer>(std::floor(ML_RAND * static_cast<Real>(rawAllInputsWidth)));
-			Real* inputsK = allInputs[k];
-			Real* outputsK = expectedOutputs[k];
-			Propagate(inputsK, rawAllInputsHeight, isClassification);
+			Integer k = static_cast<Integer>(std::floor(ML_RAND * static_cast<Real>(inputsCount)));
+			std::vector<Real> inputsK(rawAllInputs+ k * inputSize, rawAllInputs + (k + 1) * inputSize);
+            std::vector<Real> outputsK(rawExpectedOutputs+ k * outputSize, rawExpectedOutputs + (k + 1) * outputSize);
+            std::cout<<" Input "<<k<<" selected, values : ";
+            for (int i = 0; i < inputSize; ++i) {
+                std::cout<<inputsK[i]<<" ";
+            }
+            std::cout<<std::endl<<"Exepected output value(s) : ";
+            for (int i = 0; i < outputSize; ++i) {
+                std::cout<<outputsK[i]<<" ";
+            }
+            std::cout<<std::endl;
+			Propagate(inputsK, isClassification);
 			for (Integer j = 1; j < m_D[m_L] + 1; ++j)
 			{
 				m_Deltas[m_L][j] = m_X[m_L][j] - outputsK[j - 1];
 				if(isClassification)
 				{
 					m_Deltas[m_L][j] *= (1 - (m_X[m_L][j] * m_X[m_L][j]));
-                    std::cout<<m_L<<"/"<<m_D[m_L] + 1<< " l,j "<<j<<"/"<<m_D[m_L] + 1;
-                    std::cout<<";;"<<"delta : "<< m_Deltas[m_L][j]<<std::endl;
+                    //std::cout<<m_L<<"/"<<m_D[m_L] + 1<< " l,j "<<j<<"/"<<m_D[m_L] + 1;
+                    //std::cout<<";;"<<"delta : "<< m_Deltas[m_L][j]<<std::endl;
 
                 }
 			}
@@ -158,18 +166,28 @@ namespace GG::ML {
 					Real sum = 0.0;
                     for (int j = 1; j < m_D[l] + 1; ++j)
 					{
-                        std::cout<<j<<" weight ; "<<m_W[l][i][j];
+                        //std::cout<<j<<" weight ; "<<m_W[l][i][j];
 						sum += m_W[l][i][j] * m_Deltas[l][j];
 					}
-                    std::cout<<";;"<<" signal "<< m_X[l - 1][i];
+                    //std::cout<<";;"<<" signal "<< m_X[l - 1][i];
                     m_Deltas[l - 1][i] = (1 - (m_X[l - 1][i] * m_X[l - 1][i])) * sum;
-                    std::cout<<";;"<<sum<<" sum, delta"<< m_Deltas[l - 1][i]<<std::endl;
+                    //std::cout<<";;"<<sum<<" sum, delta"<< m_Deltas[l - 1][i]<<std::endl;
                 }
 			}
-            for (int l = 0; l < m_L+1; ++l)
-                for (int i = 0; i < m_D[l] + 1; ++i)
-                    std::cout<<"Value of x : " << m_X[l][i] << "with : "<<l<<" / "<<m_L+1-1<<","<< i << " / "<<m_D[l] + 1-1<<";;;";
-            std::cout<<std::endl;
+            //Helper cout loop
+            /*for (int l = 0; l < m_L+1; ++l){
+                for(int j=0;j<m_D[l]+1;++j){
+                    std::cout<<std::tanh(3*(m_W[1][0][1]+m_W[1][1][1]+m_W[1][2][1]))<<" Value of x : " << m_X[l][j] << " ("<<l<<","<< j<<") / ("<<m_L+1-1 << " / "<<m_D[l] + 1-1<<")"<<std::endl;
+                    if(l>0 && j>0){
+                        for (int i = 0; i < m_D[l-1] + 1; ++i) {
+                            std::cout << "Weight : "<<m_W[l][i][j] << "(" << l << "," << i << "," << j << ")=";
+                        }
+                    }
+                }
+                std::cout<<std::endl;
+            }*/
+
+
             for (int l = 1; l < m_L + 1; ++l)
 			{
 				for (int i = 0; i < m_D[l - 1] + 1; ++i)
@@ -178,15 +196,12 @@ namespace GG::ML {
 					{
                         const Real x = m_X[l - 1][i];
                         m_W[l][i][j] -= alpha * (x * m_Deltas[l][j]);
-                        std::cout << l << "/" <<m_L+1-1 << " l,i " << i << "/" <<m_D[l - 1] + 1-1 << " j :" << j << "/" <<m_D[l] + 1-1<< std::endl;
-                        if(i==0 && std::abs(x) > std::pow(10, -200)){
-                            std::cout << "Bias value > 0 " << x;
-                        }
+                        /*std::cout << l << "/" <<m_L+1-1 << " l,i " << i << "/" <<m_D[l - 1] + 1-1 << " j :" << j << "/" <<m_D[l] + 1-1<< std::endl;
                         std::cout<< alpha << " : alpha " << m_Deltas[l][j] << ": Delta " << x
                         << " : value " <<
                         (alpha * (x * m_Deltas[l][j])) << ": weightChange"
                         << "Final weight : " << m_W[l][i][j]
-                        << std::endl;
+                        << std::endl;*/
                     }
 				}
 			}
