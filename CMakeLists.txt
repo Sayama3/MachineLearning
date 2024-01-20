@@ -27,6 +27,8 @@ set(ML_SRC_FILES
         src/UUID.cpp
         src/LinearModel.cpp
         src/LinearModel.h
+        src/RadialBasisFunction.cpp
+        src/RadialBasisFunction.h
 )
 
 if(ML_SHARED_BUILD)
