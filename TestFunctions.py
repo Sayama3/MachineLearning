@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 nbIteration=250;
-def Predict(libc, useMLP, entries, X, Y, width_size, height_size, resolution, isClassification = True):
+def Predict(libc, useMLP, isClassification, entries, X, Y, width_size, height_size, resolution):
 
     test_X = np.array([[(w / resolution) * width_size, (h / resolution) * height_size] for w in range(0, resolution) for h in range(0, resolution)], np.float64)
     test_colors = []
@@ -38,7 +38,7 @@ def LinearSimple(libc, useMLP, width_size=4, height_size=4, resolution=100):
     ], np.float64)
 
     entries = np.array([2, 1], np.int32)
-    Predict(libc, useMLP, entries, X, Y, width_size, height_size, resolution)
+    Predict(libc, useMLP, True, entries, X, Y, width_size, height_size, resolution)
 
     # Show dataset
     plt.scatter(X[0, 0], X[0, 1], color='blue')
@@ -54,7 +54,7 @@ def LinearMultiple(libc, useMLP, width_size=3, height_size=3, resolution=100):
     Y.astype(np.float64)
 
     entries = np.array([2, 1], np.int32)
-    Predict(libc, useMLP, entries, X, Y, width_size, height_size, resolution)
+    Predict(libc, useMLP, True, entries, X, Y, width_size, height_size, resolution)
 
     plt.scatter(X[0:50, 0], X[0:50, 1], color='blue')
     plt.scatter(X[50:100, 0], X[50:100, 1], color='red')
@@ -66,7 +66,7 @@ def XOR(libc, useMLP, width_size=1, height_size=1, width_points=100, resolution=
     Y = np.array([1, 1, -1, -1], np.float64)
 
     entries = np.array([2, 2, 1], np.int32)
-    Predict(libc, useMLP, entries, X, Y, width_size, height_size,  resolution)
+    Predict(libc, useMLP, True, entries, X, Y, width_size, height_size,  resolution)
 
     plt.scatter(X[0:2, 0], X[0:2, 1], color='blue')
     plt.scatter(X[2:4, 0], X[2:4, 1], color='red')
@@ -80,7 +80,7 @@ def Cross(libc, useMLP, width_size=1, height_size=1, resolution=100):
     X.astype(np.float64)
 
     entries = np.array([2, 4, 1], np.int32)
-    Predict(libc, useMLP, entries, X, Y, width_size, height_size, resolution)
+    Predict(libc, useMLP, True, entries, X, Y, width_size, height_size, resolution)
 
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]] == 1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]] == 1, enumerate(X)))))[:, 1],
@@ -105,7 +105,7 @@ def MultiLinear3Classes(libc, useMLP, width_size=1, height_size=1, resolution=10
     Y.astype(np.float64)
 
     entries = np.array([2, 3], np.int32)
-    Predict(libc, useMLP, entries, X, Y, width_size, height_size, resolution)
+    Predict(libc, useMLP, True, entries, X, Y, width_size, height_size, resolution)
 
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][0] == 1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][0] == 1, enumerate(X)))))[:, 1],
@@ -128,7 +128,7 @@ def MultiCross(libc, useMLP, width_size=1, height_size=1, resolution=100):
 
     # Note: L'exemple stipule MLP (2, ?, ?, 3)... good luck
     entries = np.array([2, 3, 3, 3], np.int32)
-    Predict(libc, useMLP, entries, X, Y, width_size, height_size, resolution)
+    Predict(libc, useMLP, True, entries, X, Y, width_size, height_size, resolution)
 
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][0] == 1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][0] == 1, enumerate(X)))))[:, 1],
@@ -155,7 +155,7 @@ def LinearSimple2D(libc, useMLP, width_size=2, height_size=3, resolution=100):
     ], np.float64)
 
     entries = np.array([1, 1], np.int32)
-    Predict(libc, useMLP, entries, X, Y, width_size, height_size, resolution, False)
+    Predict(libc, useMLP, False, entries, X, Y, width_size, height_size, resolution)
 
     plt.scatter(X, Y)
     Show('Linear Simple 2D')
@@ -175,7 +175,7 @@ def NonLinearSimple2D(libc, useMLP, width_size=3, height_size=3, resolution=100)
 
     # Note: L'exemple stipule MLP (1, ?, 1)... good luck
     entries = np.array([1, 2, 1], np.int32)
-    Predict(libc, useMLP, entries, X, Y, width_size, height_size, resolution, False)
+    Predict(libc, useMLP, False, entries, X, Y, width_size, height_size, resolution)
 
     plt.scatter(X, Y)
     Show('Non Linear Simple 2D')
@@ -194,7 +194,7 @@ def LinearSimple3D(libc, useMLP, width_size=3, height_size=3, resolution=100):
     ], np.float64)
 
     entries = np.array([2, 1], np.int32)
-    Predict(libc, useMLP, entries, X, Y, width_size, height_size, resolution, False)
+    Predict(libc, useMLP, False, entries, X, Y, width_size, height_size, resolution)
 
     from mpl_toolkits.mplot3d import Axes3D
     fig = plt.figure()
