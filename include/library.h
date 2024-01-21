@@ -29,4 +29,10 @@ extern "C"
     ML_API Real linearEvaluate(TypeId id,const Real* entries);
     ML_API void linearDelete(TypeId id);
 
+	ML_API TypeId rbfCreate(Real gamma);
+	ML_API bool rbfIsValid(TypeId id);
+	ML_API void rbfDelete(TypeId id);
+	ML_API Real rbfPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount);
+	ML_API void rbfTrain(TypeId id, const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* matrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow);
+
 }
