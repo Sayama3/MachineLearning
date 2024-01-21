@@ -2,13 +2,13 @@ cmake_minimum_required(VERSION 3.24)
 
 project(Eigen3 VERSION 3.4.0 LANGUAGES CXX)
 
-file(GLOB_RECURSE EIGEN_SRC
-    include/*
-)
+#file(GLOB_RECURSE EIGEN_SRC
+#    include/*
+#)
 
-add_library(Eigen STATIC ${EIGEN_SRC})
+add_library(Eigen INTERFACE)
 
-target_include_directories(Eigen PUBLIC include)
+target_include_directories(Eigen INTERFACE include)
 add_library(Eigen3::Eigen ALIAS Eigen)
 
 set_target_properties(Eigen PROPERTIES
