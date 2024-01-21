@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_compile_definitions(MACHINE_LEARNING_EXPORTS)
 
-find_package (Eigen3 3.3 REQUIRED NO_MODULE)
+#find_package (Eigen3 3.4 REQUIRED NO_MODULE)
 
 option(ML_SHARED_BUILD "Use the MachineLearning library in shared mode." ON)
 option(ML_USE_LOGS "Enable the logs in the MachineLearning library." ON)
