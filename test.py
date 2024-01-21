@@ -78,18 +78,18 @@ libc.initialize()
 
 # Execute test functions
 #Classification
-TestFunctions.nbIteration=500
+#TestFunctions.nbIteration=500
 #TestFunctions.XOR(libc, True)
 #TestFunctions.LinearSimple(libc, True)
-TestFunctions.nbIteration=1000
+#TestFunctions.nbIteration=1000
 #TestFunctions.LinearMultiple(libc, True)
-TestFunctions.nbIteration=25000
+#TestFunctions.nbIteration=25000
 #TestFunctions.Cross(libc,True)
 #TestFunctions.MultiCross(libc,False)
-TestFunctions.nbIteration=1000
-TestFunctions.LinearSimple2D(libc, True)
+#TestFunctions.nbIteration=1000
+#TestFunctions.LinearSimple2D(libc, True)
 TestFunctions.nbIteration=5000
-TestFunctions.NonLinearSimple2D(libc, True)
+TestFunctions.LinearSimple3D(libc, True)
 #TestFunctions.LinearSimple3D(libc, False)
 #TestFunctions.MultiLinear3Classes(libc,False)
 

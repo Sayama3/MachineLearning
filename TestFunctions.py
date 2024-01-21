@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 nbIteration=250
-def Predict(libc, useMLP : bool, isClassification : bool, entries, X, Y, width_size : int, height_size : int, resolution : int, width_offset = 0, height_offset = 0):
+fig = plt.figure()
+def Predict(libc, useMLP : bool, isClassification : bool, entries, X, Y, width_size : int, height_size : int, resolution : int, width_offset = 0, height_offset = 0, threedimensions = False, depth_size = 1, depth_offset = 0):
 
     if isClassification :
         test_X = np.array([[(w / resolution) * width_size + width_offset, (h / resolution) * height_size + height_offset] for w in range(0, resolution) for h in range(0, resolution)], np.float64)
@@ -15,8 +16,8 @@ def Predict(libc, useMLP : bool, isClassification : bool, entries, X, Y, width_s
         #void Train(const Real* rawAllInputs, Integer inputSize, Integer inputsCount, const Real* rawExcpectedOutputs, Integer outputSize, Integer outpuCount, bool isClassification = true, Real alpha = 0.01f, Integer maxIter = 1000);
         libc.mlpTrain(idMLP, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], isClassification, 0.1, nbIteration)
         for input_x in test_X:
-            raveled=input_x.ravel();
-            predictCount = libc.mlpPredict(idMLP,raveled , raveled.size, isClassification)
+            raveled = input_x.ravel()
+            predictCount = libc.mlpPredict(idMLP, raveled, raveled.size, isClassification)
             f=libc.mlpGetPredictData(idMLP, predictCount)
             if isClassification:
                 # Three colors ?
@@ -38,7 +39,12 @@ def Predict(libc, useMLP : bool, isClassification : bool, entries, X, Y, width_s
     if isClassification:
         plt.scatter(test_X[:, 0], test_X[:, 1], c=test_colors)
     else:
-        plt.scatter(test_X, test_Y, c=test_colors)
+        if threedimensions:
+            fig = plt.figure()
+            ax = fig.add_subplot(111, projection='3d')
+            ax.scatter(test_X, test_Y, c=test_colors)
+        else:
+            plt.scatter(test_X, test_Y, c=test_colors)
 
 def LinearSimple(libc, useMLP, width_size=4, height_size=4, resolution=100):
 
@@ -197,7 +203,7 @@ def NonLinearSimple2D(libc, useMLP, width_size=3, height_size=3, resolution=100)
     Show('Non Linear Simple 2D')
 
 # Note: les graphs 3d sont broken (Montre un graph 2d + un graph 3d
-def LinearSimple3D(libc, useMLP, width_size=3, height_size=3, resolution=100):
+def LinearSimple3D(libc, useMLP, width_size=3, height_size=3, depth_size=3, resolution=100):
     X = np.array([
         [1, 1],
         [2, 2],
@@ -209,11 +215,10 @@ def LinearSimple3D(libc, useMLP, width_size=3, height_size=3, resolution=100):
         2.5
     ], np.float64)
 
-    entries = np.array([2, 1], np.int32)
-    Predict(libc, useMLP, False, entries, X, Y, width_size, height_size, resolution)
+    # Sould be [2 ,1], but this leads to a crash...
+    entries = np.array([1, 2, 1], np.int32)
+    Predict(libc, useMLP, False, entries, X, Y, width_size, height_size, resolution, 0, 0, True, depth_size)
 
-    from mpl_toolkits.mplot3d import Axes3D
-    fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(X[:, 0], X[:, 1], Y)
     Show('Linear Simple 3D')
