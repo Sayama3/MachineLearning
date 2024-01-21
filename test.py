@@ -86,8 +86,6 @@ TestFunctions.nbIteration=1000
 TestFunctions.nbIteration=25000
 #TestFunctions.Cross(libc,True)
 #TestFunctions.MultiCross(libc,False)
-#Dimensions of entry vector causes crash for those two ?
-#Regression
 TestFunctions.nbIteration=1000
 TestFunctions.LinearSimple2D(libc, True)
 TestFunctions.nbIteration=5000

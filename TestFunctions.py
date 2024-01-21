@@ -13,18 +13,19 @@ def Predict(libc, useMLP : bool, isClassification : bool, entries, X, Y, width_s
     if useMLP:
         idMLP = libc.mlpCreate(entries, entries.size)
         #void Train(const Real* rawAllInputs, Integer inputSize, Integer inputsCount, const Real* rawExcpectedOutputs, Integer outputSize, Integer outpuCount, bool isClassification = true, Real alpha = 0.01f, Integer maxIter = 1000);
-        libc.mlpTrain(idMLP, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(),  1,np.shape(Y)[0], isClassification, 0.1, nbIteration)
+        libc.mlpTrain(idMLP, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], isClassification, 0.1, nbIteration)
         for input_x in test_X:
             raveled=input_x.ravel();
             predictCount = libc.mlpPredict(idMLP,raveled , raveled.size, isClassification)
             f=libc.mlpGetPredictData(idMLP, predictCount)
             if isClassification:
+                # Three colors ?
                 test_colors.append('lightblue' if f >= 0 else 'pink')
             else:
                 #print("Ouptputed : ")
                 #print(f)
                 test_Y.append(f)
-                test_colors.append([0.5,0.5,0.5])
+                test_colors.append('lightblue')
         libc.mlpDelete(idMLP)
 
     else:
@@ -61,7 +62,6 @@ def LinearSimple(libc, useMLP, width_size=4, height_size=4, resolution=100):
     plt.scatter(X[1:3, 0], X[1:3, 1], color='red')
     Show('Linear simple')
 
-# Note: Pas très bien zoomé
 def LinearMultiple(libc, useMLP, width_size=2, height_size=2, resolution=100, width_offset = 1, height_offset = 1):
     X = np.concatenate([np.random.random((50, 2)) * 0.9 + np.array([1, 1]), np.random.random((50, 2)) * 0.9 + np.array([2, 2])])
     Y = np.concatenate([np.ones((50, 1)), np.ones((50, 1)) * -1.0])
