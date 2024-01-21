@@ -4,7 +4,7 @@
 
 #include "RadialBasisFunction.h"
 
-void RadialBasisFunction::updateRepresentants(std::vector<std::vector<Real>> inputs,Integer nb) {
+void RadialBasisFunction::updateRepresentants(const std::vector<std::vector<Real>>& inputs,Integer nb) {
     representants.clear();
     std::vector<std::vector<std::vector<Real>>> classes;
     int k=inputs.size();
@@ -40,7 +40,7 @@ void RadialBasisFunction::updateRepresentants(std::vector<std::vector<Real>> inp
         }
 }
 
-void RadialBasisFunction::train(std::vector<std::vector<Real>> inputs,  Eigen::Matrix<Real, Eigen::Dynamic,1> outputs) {
+void RadialBasisFunction::train(const std::vector<std::vector<Real>>& inputs,  const Eigen::Matrix<Real, Eigen::Dynamic,1>& outputs) {
     int nbRep=static_cast<int>(inputs.size()*0.1);
     int r=inputs[0].size();
     updateRepresentants(inputs,nbRep);
@@ -52,7 +52,7 @@ void RadialBasisFunction::train(std::vector<std::vector<Real>> inputs,  Eigen::M
     }
      m_W=(mat.transpose()*mat.inverse())*mat.transpose()*outputs;
 }
-int RadialBasisFunction::closest(const std::vector<Real> element){
+int RadialBasisFunction::closest(const std::vector<Real>& element){
     auto min=representants[0];
     int iMin=0;
     for (int i = 1; i < representants.size(); ++i) {
@@ -63,7 +63,7 @@ int RadialBasisFunction::closest(const std::vector<Real> element){
     }
     return iMin;
 }
-Real RadialBasisFunction::dist(const std::vector<Real> v1,const std::vector<Real> v2){
+Real RadialBasisFunction::dist(const std::vector<Real>& v1,const std::vector<Real>& v2){
     Real sum=0;
     for (int i = 0; i <std::min(v1.size(),v2.size()); ++i) {
         sum+=std::pow(v1[0]-v2[0],2);
@@ -72,6 +72,6 @@ Real RadialBasisFunction::dist(const std::vector<Real> v1,const std::vector<Real
 
 }
 
-Real RadialBasisFunction::predict(Eigen::Matrix<Real, Eigen::Dynamic, 1> inputs) {
+Real RadialBasisFunction::predict(const Eigen::Matrix<Real, Eigen::Dynamic, 1>& inputs) {
     return (m_W*inputs)(0,0);
 }

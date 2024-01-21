@@ -17,17 +17,17 @@ public:
     inline RadialBasisFunction(Real gamma):gamma(gamma){
 
     }
-    Real predict(Eigen::Matrix<Real, Eigen::Dynamic,1> inputs);
-    void train(std::vector<std::vector<Real>> inputs,Eigen::Matrix<Real, Eigen::Dynamic,1> outputs);
+    Real predict(const Eigen::Matrix<Real, Eigen::Dynamic,1>& inputs);
+    void train(const std::vector<std::vector<Real>>& inputs,const Eigen::Matrix<Real, Eigen::Dynamic,1>& outputs);
 private:
     Real gamma;
     std::vector<std::vector<Real>> representants;
     Eigen::Matrix<Real,Eigen::Dynamic,Eigen::Dynamic> m_W;
-    void updateRepresentants(std::vector<std::vector<Real>> inputs,Integer nb);
+    void updateRepresentants(const std::vector<std::vector<Real>>& inputs, Integer nb);
 
-    int closest(const std::vector<Real> element);
+    int closest(const std::vector<Real>& element);
 
-    Real dist(const std::vector<Real> v1, const std::vector<Real> v2);
+    Real dist(const std::vector<Real>& v1, const std::vector<Real>& v2);
 };
 
 
