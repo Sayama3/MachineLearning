@@ -66,7 +66,7 @@ void RadialBasisFunction::updateRepresentants(const std::vector<std::vector<Real
 
 void RadialBasisFunction::train(Integer nbOfRepresentants,const std::vector<std::vector<Real>>& inputs,  const Eigen::Matrix<Real, Eigen::Dynamic,1>& outputs) {
     std::cout<<nbOfRepresentants<<" nbOfRepresentants,inputsCount "<<inputs.size()<<" Input size ; "<<inputs[0].size()<<std::endl;
-    int r=inputs[0].size();
+    int r = inputs.size();
     updateRepresentants(inputs, nbOfRepresentants);
     std::cout << r << "r,nbRpe" << nbOfRepresentants << std::endl;
     Eigen::Matrix<Real ,Eigen::Dynamic,Eigen::Dynamic> mat(r, nbOfRepresentants);
