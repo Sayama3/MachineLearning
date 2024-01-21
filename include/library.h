@@ -32,7 +32,7 @@ extern "C"
 	ML_API TypeId rbfCreate(Real gamma);
 	ML_API bool rbfIsValid(TypeId id);
 	ML_API void rbfDelete(TypeId id);
-	ML_API Real rbfPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount);
-	ML_API void rbfTrain(TypeId id, const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* matrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow);
+	ML_API Real rbfPredict(TypeId id, bool isClassification,const Real* rawInputs, Integer rawInputsCount);
+	ML_API void rbfTrain(TypeId id, Integer sizeOfModel,const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* matrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow);
 
 }
