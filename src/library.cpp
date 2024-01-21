@@ -204,7 +204,7 @@ void rbfTrain(TypeId id, Integer sizeOfModel, const Real* rawAllInputs, Integer 
     //std::cout<<sizeOfRow<<"iMax,jMax"<<numberOfRow<<std::endl;
     Eigen::Matrix<Real, Eigen::Dynamic, 1> outputMatrix(numberOfRow);
         {for (int j = 0; j < numberOfRow; ++j) {
-            std::cout<<"j"<<j<< " gets outputed : "<<rawMatrixOutputRowAligned[j];
+            //std::cout<<"j"<<j<< " gets outputed : "<<rawMatrixOutputRowAligned[j];
                 outputMatrix(j) = rawMatrixOutputRowAligned[j];
 		}
 	}

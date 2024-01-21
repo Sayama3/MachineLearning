@@ -27,67 +27,71 @@ void RadialBasisFunction::updateRepresentants(const std::vector<std::vector<Real
     while(!stop){
             //We'll stop except if one of the representant changed
             stop=true;
+            std::cout<<"New K-Mean iteration"<<std::endl;
             //Clear existing classes
-            std::cout<<"Clearing current classes"<<std::endl;
+            //std::cout<<"Clearing current classes"<<std::endl;
             for(auto cl : classes)
                 cl.clear();
             //Place all elements in their respective classes based on closest representants
-            std::cout<<"Assigning classes"<<std::endl;
+            //std::cout<<"Assigning classes"<<std::endl;
             for(const auto x : inputs) {
                 classes[closest(x)].push_back(x);
             }
-            std::cout<<"Determining representants position"<<std::endl;
+            //std::cout<<"Determining representants position"<<std::endl;
             //Calculate new representants based on class average
             for (int i = 0; i < classes.size(); ++i) {
                 std::vector<Real> sum;
                 std::vector<std::vector<Real>> &currClass = classes[i];
                 int classSize= currClass.size();
-                std::cout<<"Initializing sum array of size "<<currClass.size()<<std::endl;
+                //std::cout<<"Initializing sum array of size "<<currClass.size()<<std::endl;
                 for (int j = 0; j < sizeOfInput; ++j)
                     sum.push_back(0.0);
-                std::cout<<"Calculating average of class "<<i<<std::endl;
+                //std::cout<<"Calculating average of class "<<i<<std::endl;
                 for(const auto& member : currClass)
                     for (int j = 0; j < member.size(); ++j)
                         sum[j]+=member[j]/classSize;
                 //We compare coord by coord the new value for i representant with the previous one
                 //If all are equals we don't ask to continue
-                std::cout<<"Checking if representant changed since last iteration, did it already change : "<<!stop<<std::endl;
+                //std::cout<<"Checking if representant changed since last iteration, did it already change : "<<!stop<<std::endl;
                 for(int coord=0;coord<representants[i].size();++coord) {
                     if (sum[coord] != representants[i][coord]) {
-                        std::cout<<" checking coord "<<coord<<" : "<<sum[coord]<<std::endl;
+                        //std::cout<<" checking coord "<<coord<<" : "<<sum[coord]<<std::endl;
                         stop = false;
                     }
                 }
-                std::cout<<"Assigning new pos to rep : "<<i<<std::endl;
+                //std::cout<<"Assigning new pos to rep : "<<i<<std::endl;
                 representants[i]=sum;
             }
         }
 }
 
 void RadialBasisFunction::train(Integer nbOfRepresentants,const std::vector<std::vector<Real>>& inputs,  const Eigen::Matrix<Real, Eigen::Dynamic,1>& outputs) {
-    std::cout<<nbOfRepresentants<<" nbOfRepresentants,inputsCount "<<inputs.size()<<" Input size ; "<<inputs[0].size()<<std::endl;
+    std::cout << nbOfRepresentants << " nbOfRepresentants,inputsCount " << inputs.size() << " Input size ; "
+              << inputs[0].size() << std::endl;
     int r = inputs.size();
     updateRepresentants(inputs, nbOfRepresentants);
     std::cout << r << "r,nbRpe" << nbOfRepresentants << std::endl;
-    Eigen::Matrix<Real ,Eigen::Dynamic,Eigen::Dynamic> mat(r, nbOfRepresentants);
+    Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic> mat(r, nbOfRepresentants);
     for (int i = 0; i < r; ++i) {
         for (int j = 0; j < nbOfRepresentants; ++j) {
-            Real value=Exp(dist(inputs[i],representants[j]));
-            std::cout<<i<<"i,j"<<j<<" = "<<value<<std::endl;
-            mat(i,j)=value;
+            Real value = Exp(dist(inputs[i], representants[j]));
+            //std::cout<<i<<"i,j"<<j<<" = "<<value<<std::endl;
+            mat(i, j) = value;
         }
     }
-    std::cout<<"Computed Bell curve Xi x REPj"<<std::endl;
-    std::cout<<mat<<std::endl<<std::endl;
-    auto Mt=mat.transpose();
-    std::cout<<"Mt"<<std::endl<<Mt<<std::endl<<std::endl;
-    std::cout<<"Mt*M"<<std::endl<<Mt*mat<<std::endl;
-    std::cout<<"(prod)-1"<<std::endl<<(Mt*mat).inverse()<<std::endl<<std::endl;
-    std::cout<<"(prod)-1*prod"<<std::endl<<(Mt*mat).inverse()*(Mt*mat)<<std::endl<<std::endl;
-    std::cout<<"prod-1*tM"<<std::endl<<(Mt*mat).inverse()*Mt<<std::endl;
-    std::cout<<"outputs"<<std::endl<<outputs<<std::endl;
-    std::cout<<"prod-1*tM*outputs"<<std::endl<<(Mt*mat).inverse()*Mt*outputs<<std::endl;
-    std::cout<<" W : "<<m_W<<std::endl;
+    auto Mt = mat.transpose();
+    if (false) {
+    std::cout << "Computed Bell curve Xi x REPj" << std::endl;
+    std::cout << mat << std::endl << std::endl;
+    std::cout << "Mt" << std::endl << Mt << std::endl << std::endl;
+    std::cout << "Mt*M" << std::endl << Mt * mat << std::endl;
+    std::cout << "(prod)-1" << std::endl << (Mt * mat).inverse() << std::endl << std::endl;
+    std::cout << "(prod)-1*prod" << std::endl << (Mt * mat).inverse() * (Mt * mat) << std::endl << std::endl;
+    std::cout << "prod-1*tM" << std::endl << (Mt * mat).inverse() * Mt << std::endl;
+    std::cout << "outputs" << std::endl << outputs << std::endl;
+    std::cout << "prod-1*tM*outputs" << std::endl << (Mt * mat).inverse() * Mt * outputs << std::endl;
+    std::cout << " W : " << m_W << std::endl;
+    }
     m_W=((mat.transpose()*mat).inverse()*mat.transpose()*outputs).transpose();
     std::cout<<"Updated w"<<std::endl<<m_W<<std::endl;
 }
