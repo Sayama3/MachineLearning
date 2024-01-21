@@ -72,12 +72,6 @@ namespace GG::ML {
 		}
 	}
 
-	void MultiLayerPerceptron::Propagate(const Real* rawInputs, Integer rawInputsCount, bool isClassification)
-	{
-		std::vector<Real> inputs(rawInputs, rawInputs + rawInputsCount);
-		Propagate(inputs, isClassification);
-	}
-
 	Integer MultiLayerPerceptron::Predict(const Real* rawInputs, Integer rawInputsCount, bool isClassification)
 	{
 		std::vector<Real> inputs(rawInputs, rawInputs + rawInputsCount);

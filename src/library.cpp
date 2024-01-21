@@ -87,14 +87,6 @@ void mlpDelete(TypeId id)
 	(*s_MLPs)[id] = nullptr;
 }
 
-
-void mlpPropagate(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification)
-{
-	if(!mlpIsValid(id)){ML_LOG("'mlpPropagate' - id '" << std::to_string(id) << "' doesn't exist."); return;}
-
-	(*s_MLPs)[id]->Propagate(rawInputs ,rawInputsCount ,isClassification);
-}
-
 Integer mlpPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification)
 {
 	if(!mlpIsValid(id)){ML_LOG("'mlpPredict' - id '" << std::to_string(id) << "' doesn't exist."); return 0;}

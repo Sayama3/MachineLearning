@@ -18,10 +18,9 @@ extern "C"
 	ML_API TypeId mlpCreate(const Integer* entries, Integer count);
 	ML_API void mlpDelete(TypeId id);
 	ML_API bool mlpIsValid(TypeId id);
-	ML_API void mlpPropagate(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification);
 	ML_API Integer mlpPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount, bool isClassification = true);
 	ML_API Real mlpGetPredictData(TypeId id, Integer index);
-	ML_API void mlpTrain(TypeId id, const Real* rawAllInputs, Integer rawAllInputsWidth, Integer rawAllInputsHeight, const Real* rawExcpectedOutputs, Integer rawExcpectedOutputsWidth, Integer rawExcpectedOutputsHeight, bool isClassification = true, Real alpha = 0.01f, Integer maxIter = 1000);
+	ML_API void mlpTrain(TypeId id, const Real* rawAllInputs, Integer inputSize, Integer inputsCount, const Real* rawExcpectedOutputs, Integer outputSize, Integer outputsCount, bool isClassification = true, Real alpha = 0.01f, Integer maxIter = 1000);
 
 	ML_API bool linearIsValid(TypeId id);
     ML_API TypeId linearCreate(bool isClassification,Real step,Integer entrySize);
