@@ -1,7 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from enum import Enum
 nbIteration=250
-def Predict(libc, useMLP : bool, isClassification : bool, entries, X, Y, width_size : int, height_size : int, resolution : int, width_offset = 0, height_offset = 0):
+rbfGamma=0.1
+rbfRepresentantProportion=1
+class Model(Enum):
+    LIN = 1
+    MLP = 2
+    RBF = 3
+def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_size : int, height_size : int, resolution : int, width_offset = 0, height_offset = 0):
 
     if isClassification :
         test_X = np.array([[(w / resolution) * width_size + width_offset, (h / resolution) * height_size + height_offset] for w in range(0, resolution) for h in range(0, resolution)], np.float64)
@@ -10,7 +17,7 @@ def Predict(libc, useMLP : bool, isClassification : bool, entries, X, Y, width_s
         test_Y= []
     test_colors = []
 
-    if useMLP:
+    if model.value==Model.MLP.value:
         idMLP = libc.mlpCreate(entries, entries.size)
         #void Train(const Real* rawAllInputs, Integer inputSize, Integer inputsCount, const Real* rawExcpectedOutputs, Integer outputSize, Integer outpuCount, bool isClassification = true, Real alpha = 0.01f, Integer maxIter = 1000);
         libc.mlpTrain(idMLP, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(),  1,np.shape(Y)[0], isClassification, 0.1, nbIteration)
@@ -21,19 +28,22 @@ def Predict(libc, useMLP : bool, isClassification : bool, entries, X, Y, width_s
             if isClassification:
                 test_colors.append('lightblue' if f >= 0 else 'pink')
             else:
-                #print("Ouptputed : ")
-                #print(f)
                 test_Y.append(f)
                 test_colors.append([0.5,0.5,0.5])
         libc.mlpDelete(idMLP)
 
-    else:
+    elif  model.value==Model.LIN.value:
         idLinear = libc.linearCreate(isClassification,0.01, np.shape(X)[1])
         libc.linearTrain(idLinear, nbIteration,X.ravel(), Y.ravel(), np.shape(X)[0])
         test_colors = ['lightblue' if libc.linearEvaluate(idLinear, input_x) >= 0 else 'pink' for input_x in test_X]
         libc.linearDelete(idLinear)
-
-    # Show prediction
+    elif model.value==Model.RBF.value:
+        idRbf = libc.rbfCreate(rbfGamma);
+        #rbfTrain(TypeId id, Integer sizeOfModel,const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* matrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow);
+        libc.rbfTrain(idRbf,int(np.floor(rbfRepresentantProportion*np.shape(X)[0])),X.ravel(),np.shape(X)[0],np.shape(X)[1],Y.ravel(),1,np.shape(Y)[0])
+        #Real rbfPredict(TypeId id,bool isClassification, const Real* rawInputs, Integer rawInputsCount);
+        test_colors = ['lightblue' if libc.rbfPredict(idRbf,isClassification, input_x.ravel(),input_x.ravel().size) >= 0 else 'pink' for input_x in test_X]
+# Show prediction
     if isClassification:
         plt.scatter(test_X[:, 0], test_X[:, 1], c=test_colors)
     else:

@@ -74,24 +74,43 @@ libc.linearEvaluate.restype = REAL
 
 libc.linearDelete.argtypes = [INT]
 
+#TypeId rbfCreate(Real gamma);
+libc.rbfCreate.argtypes = [REAL]
+libc.rbfCreate.restype = INT
+#bool rbfIsValid(TypeId id);
+libc.rbfIsValid.argtypes = [INT]
+libc.rbfIsValid.restype = BOOL
+#void rbfDelete(TypeId id);
+libc.rbfDelete.argtypes = [INT]
+#Real rbfPredict(TypeId id,bool isClassification, const Real* rawInputs, Integer rawInputsCount);
+libc.rbfPredict.argtypes = [INT,BOOL,ND_POINTER_FLOAT,INT]
+libc.rbfPredict.restype = REAL
+#void rbfTrain(TypeId id, Integer sizeOfModel, const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* rawMatrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow)
+libc.rbfTrain.argtypes = [INT,INT,ND_POINTER_FLOAT,INT,INT,ND_POINTER_FLOAT,INT,INT]
+
+
 libc.initialize()
 
 # Execute test functions
 #Classification
-TestFunctions.nbIteration=500
-#TestFunctions.XOR(libc, True)
-#TestFunctions.LinearSimple(libc, True)
+TestFunctions.nbIteration=1
+TestFunctions.rbfGamma=1
+rbfRepresentantProportion=1
+#TestFunctions.LinearSimple(libc, TestFunctions.Model.RBF)
+TestFunctions.rbfGamma=0.3
+TestFunctions.XOR(libc, TestFunctions.Model.RBF)
 TestFunctions.nbIteration=1000
-#TestFunctions.LinearMultiple(libc, True)
+rbfRepresentantProportion=0.25
+#TestFunctions.LinearMultiple(libc, TestFunctions.Model.RBF)
 TestFunctions.nbIteration=25000
-#TestFunctions.Cross(libc,True)
+#TestFunctions.Cross(libc,TestFunctions.Model.RBF)
 #TestFunctions.MultiCross(libc,False)
 #Dimensions of entry vector causes crash for those two ?
 #Regression
 TestFunctions.nbIteration=1000
-TestFunctions.LinearSimple2D(libc, True)
+#TestFunctions.LinearSimple2D(libc,  TestFunctions.Model.MLP)
 TestFunctions.nbIteration=5000
-TestFunctions.NonLinearSimple2D(libc, True)
+#TestFunctions.NonLinearSimple2D(libc,  TestFunctions.Model.MLP)
 #TestFunctions.LinearSimple3D(libc, False)
 #TestFunctions.MultiLinear3Classes(libc,False)
 
