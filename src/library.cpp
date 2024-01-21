@@ -177,7 +177,7 @@ void rbfDelete(TypeId id)
 
 Real rbfPredict(TypeId id, const Real* rawInputs, Integer rawInputsCount)
 {
-	if(!rbfIsValid(id)){ML_LOG("'rbfDelete' - id '" << std::to_string(id) << "' doesn't exist."); return 0.0;}
+	if(!rbfIsValid(id)){ML_LOG("'rbfPredict' - id '" << std::to_string(id) << "' doesn't exist."); return 0.0;}
 
 	Eigen::Matrix<Real, Eigen::Dynamic,1> mat(rawInputsCount, 1);
 	for (int row = 0; row < rawInputsCount; ++row) {
