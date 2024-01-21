@@ -95,14 +95,17 @@ libc.initialize()
 #Classification
 TestFunctions.nbIteration=1
 TestFunctions.rbfGamma=1
-rbfRepresentantProportion=1
-#TestFunctions.LinearSimple(libc, TestFunctions.Model.RBF)
+TestFunctions.rbfRepresentantProportion=1
+TestFunctions.LinearSimple(libc, TestFunctions.Model.RBF)
 TestFunctions.rbfGamma=0.3
 TestFunctions.XOR(libc, TestFunctions.Model.RBF)
 TestFunctions.nbIteration=1000
-rbfRepresentantProportion=0.25
+TestFunctions.rbfRepresentantProportion=0.1
 #TestFunctions.LinearMultiple(libc, TestFunctions.Model.RBF)
 TestFunctions.nbIteration=25000
+TestFunctions.rbfRepresentantProportion=0.1
+#TestFunctions.Cross(libc,TestFunctions.Model.RBF)
+TestFunctions.rbfRepresentantProportion=1
 #TestFunctions.Cross(libc,TestFunctions.Model.RBF)
 #TestFunctions.MultiCross(libc,False)
 #Dimensions of entry vector causes crash for those two ?
