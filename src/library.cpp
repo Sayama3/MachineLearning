@@ -186,30 +186,34 @@ Real rbfPredict(TypeId id, bool isClassification, const Real* rawInputs, Integer
 
 	return (*s_RBFs)[id]->predict(isClassification,mat);
 }
-
-void rbfTrain(TypeId id, Integer sizeOfModel, const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* rawMatrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow)
+void rbfTrain(TypeId id, Integer sizeOfModel, const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* rawMatrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow,Integer maxKMeanIter)
 {
-	if(!rbfIsValid(id)){ML_LOG("'rbfTrain' - id '" << std::to_string(id) << "' doesn't exist."); return;}
-
-    std::cout<<sizeOfInputSubArray<<"iMax,jMax"<<numberOfInputSubArray<<std::endl;
-    // Create Matrix
-    std::vector<std::vector<Real>> inputs;
-    for (int subArray = 0; subArray < numberOfInputSubArray; ++subArray) {
-        inputs.emplace_back();
-        for (int indexInSubArray = 0; indexInSubArray < sizeOfInputSubArray; ++indexInSubArray) {
-            inputs[subArray].push_back(rawAllInputs[(subArray * sizeOfInputSubArray) + indexInSubArray]);
+        if (!rbfIsValid(id)) {
+            ML_LOG("'rbfTrain' - id '" << std::to_string(id) << "' doesn't exist.");
+            return;
         }
-    }
-    //Create Vector
-    //std::cout<<sizeOfRow<<"iMax,jMax"<<numberOfRow<<std::endl;
-    Eigen::Matrix<Real, Eigen::Dynamic, 1> outputMatrix(numberOfRow);
-        {for (int j = 0; j < numberOfRow; ++j) {
-            //std::cout<<"j"<<j<< " gets outputed : "<<rawMatrixOutputRowAligned[j];
+
+        std::cout << sizeOfInputSubArray << "iMax,jMax" << numberOfInputSubArray << std::endl;
+        // Create Matrix
+        std::vector<std::vector<Real>> inputs;
+        for (int subArray = 0; subArray < numberOfInputSubArray; ++subArray) {
+            inputs.emplace_back();
+            for (int indexInSubArray = 0; indexInSubArray < sizeOfInputSubArray; ++indexInSubArray) {
+                inputs[subArray].push_back(rawAllInputs[(subArray * sizeOfInputSubArray) + indexInSubArray]);
+            }
+        }
+        //Create Vector
+        //std::cout<<sizeOfRow<<"iMax,jMax"<<numberOfRow<<std::endl;
+        Eigen::Matrix<Real, Eigen::Dynamic, 1> outputMatrix(numberOfRow);
+        {
+            for (int j = 0; j < numberOfRow; ++j) {
+                //std::cout<<"j"<<j<< " gets outputed : "<<rawMatrixOutputRowAligned[j];
                 outputMatrix(j) = rawMatrixOutputRowAligned[j];
-		}
-	}
-
-
-	(*s_RBFs)[id]->train(sizeOfModel,inputs, outputMatrix);
+            }
+        }
+	(*s_RBFs)[id]->train(sizeOfModel,inputs, outputMatrix,maxKMeanIter);
 }
-
+void rbfTrainDefault(TypeId id, Integer sizeOfModel, const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* rawMatrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow) {
+    rbfTrain(id, sizeOfModel, rawAllInputs, numberOfInputSubArray, sizeOfInputSubArray,
+             rawMatrixOutputRowAligned, sizeOfRow, numberOfRow, 1000);
+}
