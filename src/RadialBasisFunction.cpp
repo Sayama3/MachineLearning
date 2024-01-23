@@ -3,12 +3,15 @@
 //
 
 #include "RadialBasisFunction.h"
+#define KMEAN_EPS 0.000001
 
-void RadialBasisFunction::updateRepresentants(const std::vector<std::vector<Real>>& inputs,Integer nb) {
+
+void RadialBasisFunction::updateRepresentants(const std::vector<std::vector<Real>>& inputs,Integer nb,Integer maxIter) {
     representants.clear();
     std::vector<std::vector<std::vector<Real>>> classes;
     int k=inputs.size();
     int sizeOfInput=k>0 ? inputs[0].size() : 0;
+    //std::cout<<nb<< " representants among : "<<k;
     std::vector<int> availableIndices(k);
     std::iota(availableIndices.begin(), availableIndices.end(), 0);
     while(representants.size()<nb && !availableIndices.empty()){
@@ -23,11 +26,12 @@ void RadialBasisFunction::updateRepresentants(const std::vector<std::vector<Real
         classes.push_back(cl);
     }
     bool stop=false;
-    //TO-DO exitCondition check lastRepresentants
-    while(!stop){
+    int safe=0;
+    while(!stop && safe<maxIter){
             //We'll stop except if one of the representant changed
             stop=true;
-            std::cout<<"New K-Mean iteration"<<std::endl;
+            safe++;
+            //std::cout<<"New K-Mean iteration"<<std::endl;
             //Clear existing classes
             //std::cout<<"Clearing current classes"<<std::endl;
             for(auto cl : classes)
@@ -54,47 +58,17 @@ void RadialBasisFunction::updateRepresentants(const std::vector<std::vector<Real
                 //If all are equals we don't ask to continue
                 //std::cout<<"Checking if representant changed since last iteration, did it already change : "<<!stop<<std::endl;
                 for(int coord=0;coord<representants[i].size();++coord) {
-                    if (sum[coord] != representants[i][coord]) {
+                    if (std::abs(sum[coord]-representants[i][coord])>KMEAN_EPS) {
                         //std::cout<<" checking coord "<<coord<<" : "<<sum[coord]<<std::endl;
                         stop = false;
                     }
                 }
-                //std::cout<<"Assigning new pos to rep : "<<i<<std::endl;
+                //std::cout<<sum[0]<<" , "<<sum[1]<<" :  asigned as new pos to rep : "<<i<<" of size : "<<sum.size()<<std::endl;
                 representants[i]=sum;
             }
         }
 }
 
-void RadialBasisFunction::train(Integer nbOfRepresentants,const std::vector<std::vector<Real>>& inputs,  const Eigen::Matrix<Real, Eigen::Dynamic,1>& outputs) {
-    std::cout << nbOfRepresentants << " nbOfRepresentants,inputsCount " << inputs.size() << " Input size ; "
-              << inputs[0].size() << std::endl;
-    int r = inputs.size();
-    updateRepresentants(inputs, nbOfRepresentants);
-    std::cout << r << "r,nbRpe" << nbOfRepresentants << std::endl;
-    Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic> mat(r, nbOfRepresentants);
-    for (int i = 0; i < r; ++i) {
-        for (int j = 0; j < nbOfRepresentants; ++j) {
-            Real value = Exp(dist(inputs[i], representants[j]));
-            //std::cout<<i<<"i,j"<<j<<" = "<<value<<std::endl;
-            mat(i, j) = value;
-        }
-    }
-    auto Mt = mat.transpose();
-    if (false) {
-    std::cout << "Computed Bell curve Xi x REPj" << std::endl;
-    std::cout << mat << std::endl << std::endl;
-    std::cout << "Mt" << std::endl << Mt << std::endl << std::endl;
-    std::cout << "Mt*M" << std::endl << Mt * mat << std::endl;
-    std::cout << "(prod)-1" << std::endl << (Mt * mat).inverse() << std::endl << std::endl;
-    std::cout << "(prod)-1*prod" << std::endl << (Mt * mat).inverse() * (Mt * mat) << std::endl << std::endl;
-    std::cout << "prod-1*tM" << std::endl << (Mt * mat).inverse() * Mt << std::endl;
-    std::cout << "outputs" << std::endl << outputs << std::endl;
-    std::cout << "prod-1*tM*outputs" << std::endl << (Mt * mat).inverse() * Mt * outputs << std::endl;
-    std::cout << " W : " << m_W << std::endl;
-    }
-    m_W=((mat.transpose()*mat).inverse()*mat.transpose()*outputs).transpose();
-    std::cout<<"Updated w"<<std::endl<<m_W<<std::endl;
-}
 int RadialBasisFunction::closest(const std::vector<Real>& element){
     Real min=dist(element,representants[0]);
     int iMin=0;
@@ -133,4 +107,40 @@ Real RadialBasisFunction::predict(bool isClassification, const Eigen::Matrix<Rea
             std::cout<<"Evaluated : "<<r<<" to "<<std::exp(-gamma*dist(representants[r],inputs))<< " * "<<m_W[r]<<std::endl;
     }
     return isClassification ? (sum>=0.0 ? 1.0 : -1.0) : sum;
+}
+
+void RadialBasisFunction::train(Integer nbOfRepresentants, const std::vector<std::vector<Real>> &inputs,
+                                const Eigen::Matrix<Real, Eigen::Dynamic, 1> &outputs, Integer maxKMeanIter)
+                                {
+        std::cout << nbOfRepresentants << " nbOfRepresentants,inputsCount " << inputs.size() << " Input size ; "
+                  << inputs[0].size() << std::endl;
+        int r = inputs.size();
+        updateRepresentants(inputs, nbOfRepresentants,maxKMeanIter);
+        std::cout << r << "r,nbRpe" << nbOfRepresentants << std::endl;
+        Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic> mat(r, nbOfRepresentants);
+        for (int i = 0; i < r; ++i) {
+            for (int j = 0; j < nbOfRepresentants; ++j) {
+                Real value = Exp(dist(inputs[i], representants[j]));
+                //std::cout<<i<<"i,j"<<j<<" = "<<value<<std::endl;
+                mat(i, j) = value;
+            }
+        }
+        auto Mt = mat.transpose();
+        if (false) {
+            std::cout << "Computed Bell curve Xi x REPj" << std::endl;
+            std::cout << mat << std::endl << std::endl;
+            std::cout << "Mt" << std::endl << Mt << std::endl << std::endl;
+            std::cout << "Mt*M" << std::endl << Mt * mat << std::endl;
+            std::cout << "(prod)-1" << std::endl << (Mt * mat).inverse() << std::endl << std::endl;
+            std::cout << "(prod)-1*prod" << std::endl << (Mt * mat).inverse() * (Mt * mat) << std::endl << std::endl;
+            std::cout << "prod-1*tM" << std::endl << (Mt * mat).inverse() * Mt << std::endl;
+            std::cout << "outputs" << std::endl << outputs << std::endl;
+            std::cout << "prod-1*tM*outputs" << std::endl << (Mt * mat).inverse() * Mt * outputs << std::endl;
+            std::cout << " W : " << m_W << std::endl;
+        }
+        m_W=((mat.transpose()*mat).inverse()*mat.transpose()*outputs).transpose();
+        std::cout<<"Updated w"<<std::endl<<m_W<<std::endl;
+
+
+
 }

@@ -19,12 +19,12 @@ public:
 
     }
     Real predict(bool isClassification,const Eigen::Matrix<Real, Eigen::Dynamic,1>& inputs);
-    void train(Integer nbOfRepresentants,const std::vector<std::vector<Real>>& inputs,const Eigen::Matrix<Real, Eigen::Dynamic,1>& outputs);
+    void train(Integer nbOfRepresentants,const std::vector<std::vector<Real>>& inputs,const Eigen::Matrix<Real, Eigen::Dynamic,1>& outputs,Integer maxKMeanIter);
 private:
     Real gamma;
     std::vector<std::vector<Real>> representants;
     Eigen::Matrix<Real,1,Eigen::Dynamic> m_W;
-    void updateRepresentants(const std::vector<std::vector<Real>>& inputs, Integer nb);
+    void updateRepresentants(const std::vector<std::vector<Real>>& inputs,Integer nb,Integer maxIter);
 
     int closest(const std::vector<Real>& element);
 
