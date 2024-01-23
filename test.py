@@ -107,11 +107,12 @@ TestFunctions.nbIteration=1000
 TestFunctions.nbIteration=500
 TestFunctions.rbfRepresentantProportion=0.1
 TestFunctions.LinearMultiple(libc, TestFunctions.Model.RBF)
-TestFunctions.nbIteration=25000
 TestFunctions.nbIteration=250
-TestFunctions.rbfRepresentantProportion=0.1
-TestFunctions.Cross(libc,TestFunctions.Model.RBF)
+#Fails with .8
 TestFunctions.rbfRepresentantProportion=.8
+TestFunctions.Cross(libc,TestFunctions.Model.RBF)
+#fine with .1 even with max 100 for KMean
+TestFunctions.rbfRepresentantProportion=0.1
 TestFunctions.Cross(libc,TestFunctions.Model.RBF)
 #TestFunctions.MultiCross(libc,False)
 #Dimensions of entry vector causes crash for those two ?
