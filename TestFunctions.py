@@ -4,6 +4,7 @@ from enum import Enum
 nbIteration=250
 rbfGamma=0.1
 rbfRepresentantProportion=1
+rbfMaxIter=1000
 class Model(Enum):
     LIN = 1
     MLP = 2
@@ -40,7 +41,7 @@ def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_s
     elif model.value==Model.RBF.value:
         idRbf = libc.rbfCreate(rbfGamma);
         #rbfTrain(TypeId id, Integer sizeOfModel,const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* matrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow);
-        libc.rbfTrain(idRbf,int(np.floor(rbfRepresentantProportion*np.shape(X)[0])),X.ravel(),np.shape(X)[0],np.shape(X)[1],Y.ravel(),1,np.shape(Y)[0])
+        libc.rbfTrain(idRbf,int(np.floor(rbfRepresentantProportion*np.shape(X)[0])),X.ravel(),np.shape(X)[0],np.shape(X)[1],Y.ravel(),1,np.shape(Y)[0],rbfMaxIter)
         #Real rbfPredict(TypeId id,bool isClassification, const Real* rawInputs, Integer rawInputsCount);
         test_colors = ['lightblue' if libc.rbfPredict(idRbf,isClassification, input_x.ravel(),input_x.ravel().size) >= 0 else 'pink' for input_x in test_X]
 # Show prediction

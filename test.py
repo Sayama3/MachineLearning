@@ -85,8 +85,10 @@ libc.rbfDelete.argtypes = [INT]
 #Real rbfPredict(TypeId id,bool isClassification, const Real* rawInputs, Integer rawInputsCount);
 libc.rbfPredict.argtypes = [INT,BOOL,ND_POINTER_FLOAT,INT]
 libc.rbfPredict.restype = REAL
-#void rbfTrain(TypeId id, Integer sizeOfModel, const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* rawMatrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow)
-libc.rbfTrain.argtypes = [INT,INT,ND_POINTER_FLOAT,INT,INT,ND_POINTER_FLOAT,INT,INT]
+#void rbfTrain(TypeId id, Integer sizeOfModel,const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* matrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow,Integer maxKMeanIter);
+libc.rbfTrain.argtypes = [INT,INT,ND_POINTER_FLOAT,INT,INT,ND_POINTER_FLOAT,INT,INT,INT]
+#void rbfTrainDefault(TypeId id, Integer sizeOfModel,const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* matrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow);
+libc.rbfTrainDefault.argtypes = [INT,INT,ND_POINTER_FLOAT,INT,INT,ND_POINTER_FLOAT,INT,INT]
 
 
 libc.initialize()
@@ -95,18 +97,21 @@ libc.initialize()
 #Classification
 TestFunctions.nbIteration=1
 TestFunctions.rbfGamma=1
-TestFunctions.rbfRepresentantProportion=1
-TestFunctions.LinearSimple(libc, TestFunctions.Model.RBF)
+TestFunctions.rbfRepresentantProportion=0.75
+#TestFunctions.LinearSimple(libc, TestFunctions.Model.RBF)
 TestFunctions.rbfGamma=0.3
-TestFunctions.XOR(libc, TestFunctions.Model.RBF)
+#TestFunctions.XOR(libc, TestFunctions.Model.RBF)
+TestFunctions.rbfRepresentantProportion=1
+#TestFunctions.XOR(libc, TestFunctions.Model.RBF)
 TestFunctions.nbIteration=1000
+TestFunctions.nbIteration=500
 TestFunctions.rbfRepresentantProportion=0.1
-#TestFunctions.LinearMultiple(libc, TestFunctions.Model.RBF)
+TestFunctions.LinearMultiple(libc, TestFunctions.Model.RBF)
 TestFunctions.nbIteration=25000
 TestFunctions.rbfRepresentantProportion=0.1
-#TestFunctions.Cross(libc,TestFunctions.Model.RBF)
-TestFunctions.rbfRepresentantProportion=1
-#TestFunctions.Cross(libc,TestFunctions.Model.RBF)
+TestFunctions.Cross(libc,TestFunctions.Model.RBF)
+TestFunctions.rbfRepresentantProportion=.8
+TestFunctions.Cross(libc,TestFunctions.Model.RBF)
 #TestFunctions.MultiCross(libc,False)
 #Dimensions of entry vector causes crash for those two ?
 #Regression
