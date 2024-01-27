@@ -24,7 +24,6 @@ namespace GG::ML {
 		MultiLayerPerceptron(const Integer* layerCounts, Integer layerCount);
 		~MultiLayerPerceptron();
 
-		void Propagate(const Real* rawInputs, Integer rawInputsCount, bool isClassification);
 		Integer Predict(const Real* rawInputs, Integer rawInputsCount, bool isClassification = true);
 		Real GetPredictData(Integer index);
 		void Train(const Real* rawAllInputs, Integer inputSize, Integer inputsCount, const Real* rawExcpectedOutputs, Integer outputSize, Integer outputsCount, bool isClassification = true, Real alpha = 0.01f, Integer maxIter = 1000);

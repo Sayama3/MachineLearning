@@ -74,22 +74,53 @@ libc.linearEvaluate.restype = REAL
 
 libc.linearDelete.argtypes = [INT]
 
+#TypeId rbfCreate(Real gamma);
+libc.rbfCreate.argtypes = [REAL]
+libc.rbfCreate.restype = INT
+#bool rbfIsValid(TypeId id);
+libc.rbfIsValid.argtypes = [INT]
+libc.rbfIsValid.restype = BOOL
+#void rbfDelete(TypeId id);
+libc.rbfDelete.argtypes = [INT]
+#Real rbfPredict(TypeId id,bool isClassification, const Real* rawInputs, Integer rawInputsCount);
+libc.rbfPredict.argtypes = [INT,BOOL,ND_POINTER_FLOAT,INT]
+libc.rbfPredict.restype = REAL
+#void rbfTrain(TypeId id, Integer sizeOfModel,const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* matrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow,Integer maxKMeanIter);
+libc.rbfTrain.argtypes = [INT,INT,ND_POINTER_FLOAT,INT,INT,ND_POINTER_FLOAT,INT,INT,INT]
+#void rbfTrainDefault(TypeId id, Integer sizeOfModel,const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* matrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow);
+libc.rbfTrainDefault.argtypes = [INT,INT,ND_POINTER_FLOAT,INT,INT,ND_POINTER_FLOAT,INT,INT]
+
+
 libc.initialize()
 
 # Execute test functions
 #Classification
-#TestFunctions.nbIteration=500
-#TestFunctions.XOR(libc, True)
-#TestFunctions.LinearSimple(libc, True)
-#TestFunctions.nbIteration=1000
-#TestFunctions.LinearMultiple(libc, True)
-#TestFunctions.nbIteration=25000
-#TestFunctions.Cross(libc,True)
+TestFunctions.nbIteration=1
+TestFunctions.rbfGamma=1
+TestFunctions.rbfRepresentantProportion=0.75
+#TestFunctions.LinearSimple(libc, TestFunctions.Model.RBF)
+TestFunctions.rbfGamma=0.3
+#TestFunctions.XOR(libc, TestFunctions.Model.RBF)
+TestFunctions.rbfRepresentantProportion=1
+#TestFunctions.XOR(libc, TestFunctions.Model.RBF)
+TestFunctions.nbIteration=1000
+TestFunctions.nbIteration=500
+TestFunctions.rbfRepresentantProportion=0.1
+TestFunctions.LinearMultiple(libc, TestFunctions.Model.RBF)
+TestFunctions.nbIteration=250
+#Fails with .8
+TestFunctions.rbfRepresentantProportion=.8
+TestFunctions.Cross(libc,TestFunctions.Model.RBF)
+#fine with .1 even with max 100 for KMean
+TestFunctions.rbfRepresentantProportion=0.1
+TestFunctions.Cross(libc,TestFunctions.Model.RBF)
 #TestFunctions.MultiCross(libc,False)
-#TestFunctions.nbIteration=1000
-#TestFunctions.LinearSimple2D(libc, True)
+#Dimensions of entry vector causes crash for those two ?
+#Regression
+TestFunctions.nbIteration=1000
+#TestFunctions.LinearSimple2D(libc,  TestFunctions.Model.MLP)
 TestFunctions.nbIteration=5000
-TestFunctions.LinearSimple3D(libc, True)
+#TestFunctions.NonLinearSimple2D(libc,  TestFunctions.Model.MLP)
 #TestFunctions.LinearSimple3D(libc, False)
 #TestFunctions.MultiLinear3Classes(libc,False)
 
