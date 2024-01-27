@@ -1,7 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
+
 nbIteration=250
 fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
 def Predict(libc, useMLP : bool, isClassification : bool, entries, X, Y, width_size : int, height_size : int, resolution : int, width_offset = 0, height_offset = 0, threedimensions = False, depth_size = 1, depth_offset = 0):
 
     if isClassification :
@@ -18,7 +21,7 @@ def Predict(libc, useMLP : bool, isClassification : bool, entries, X, Y, width_s
         for input_x in test_X:
             raveled = input_x.ravel()
             predictCount = libc.mlpPredict(idMLP, raveled, raveled.size, isClassification)
-            f=libc.mlpGetPredictData(idMLP, predictCount)
+            f = libc.mlpGetPredictData(idMLP, predictCount)
             if isClassification:
                 # Three colors ?
                 test_colors.append('lightblue' if f >= 0 else 'pink')
@@ -40,8 +43,6 @@ def Predict(libc, useMLP : bool, isClassification : bool, entries, X, Y, width_s
         plt.scatter(test_X[:, 0], test_X[:, 1], c=test_colors)
     else:
         if threedimensions:
-            fig = plt.figure()
-            ax = fig.add_subplot(111, projection='3d')
             ax.scatter(test_X, test_Y, c=test_colors)
         else:
             plt.scatter(test_X, test_Y, c=test_colors)
@@ -215,16 +216,15 @@ def LinearSimple3D(libc, useMLP, width_size=3, height_size=3, depth_size=3, reso
         2.5
     ], np.float64)
 
-    # Sould be [2 ,1], but this leads to a crash...
+    # Should be [2 ,1], but this leads to a crash...
     entries = np.array([1, 2, 1], np.int32)
     Predict(libc, useMLP, False, entries, X, Y, width_size, height_size, resolution, 0, 0, True, depth_size)
 
-    ax = fig.add_subplot(111, projection='3d')
     ax.scatter(X[:, 0], X[:, 1], Y)
     Show('Linear Simple 3D')
 
 
-def LinearTricky3D():
+def LinearTricky3D(libc, useMLP, width_size=3, height_size=3, depth_size=3, resolution=100):
     X = np.array([
         [1, 1],
         [2, 2],
@@ -236,14 +236,15 @@ def LinearTricky3D():
         3
     ], np.float64)
 
-    from mpl_toolkits.mplot3d import Axes3D
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
+    # Should be [2 ,1], but this leads to a crash...
+    entries = np.array([1, 2, 1], np.int32)
+    Predict(libc, useMLP, False, entries, X, Y, width_size, height_size, resolution, 0, 0, True, depth_size)
+
     ax.scatter(X[:, 0], X[:, 1], Y)
     Show('Linear tricky 3D')
 
 
-def NonLinearSimple3D():
+def NonLinearSimple3D(libc, useMLP, width_size=1, height_size=1, depth_size=1, resolution=100):
     X = np.array([
         [1, 0],
         [0, 1],
@@ -257,9 +258,10 @@ def NonLinearSimple3D():
         -1
     ], np.float64)
 
-    from mpl_toolkits.mplot3d import Axes3D
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
+    # Should be [2, 2, 1] but this leads to a crash
+    entries = np.array([1, 2, 1], np.int32)
+    Predict(libc, useMLP, False, entries, X, Y, width_size, height_size, resolution, 0, 0, True, depth_size)
+
     ax.scatter(X[:, 0], X[:, 1], Y)
     Show('Non Linear Simple 3D')
 
@@ -276,12 +278,11 @@ def AllGraphs(libc, useMLP):
     # Regression
     LinearSimple2D(libc, useMLP)
     NonLinearSimple2D(libc, useMLP)
-    # LinearSimple3D()
-    # LinearTricky3D()
-    # NonLinearSimple3D()
+    LinearSimple3D(libc, useMLP)
+    LinearTricky3D(libc, useMLP)
+    NonLinearSimple3D(libc, useMLP)
 
 def Show(title):
     plt.title(title)
     plt.show()
     plt.clf()
-
