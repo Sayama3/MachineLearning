@@ -17,18 +17,21 @@ def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_s
 
     if isClassification:
         test_X = np.array([[(w / resolution) * width_size + width_offset, (h / resolution) * height_size + height_offset] for w in range(0, resolution) for h in range(0, resolution)], np.float64)
-    else :
-        test_X = np.array([[(w / resolution) * width_size + width_offset] for w in range(0, resolution)],np.float64)
-        test_Y= []
+    else:
+        if threeDimensions:
+            test_X = np.array([[(w / resolution) * width_size + width_offset, (h / resolution) * height_size + height_offset] for w in range(0, resolution) for h in range(0, resolution)], np.float64)
+        else:
+            test_X = np.array([[(w / resolution) * width_size + width_offset] for w in range(0, resolution)], np.float64)
+        test_Y = []
     test_colors = []
 
     if model.value == Model.MLP.value:
         idMLP = libc.mlpCreate(entries, entries.size)
         #void Train(const Real* rawAllInputs, Integer inputSize, Integer inputsCount, const Real* rawExcpectedOutputs, Integer outputSize, Integer outpuCount, bool isClassification = true, Real alpha = 0.01f, Integer maxIter = 1000);
-        libc.mlpTrain(idMLP, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(),  1,np.shape(Y)[0], isClassification, 0.1, nbIteration)
+        libc.mlpTrain(idMLP, X.ravel(), np.shape(X)[1], np.shape(X)[0], Y.ravel(), 1, np.shape(Y)[0], isClassification, 0.1, nbIteration)
         for input_x in test_X:
-            raveled=input_x.ravel()
-            predictCount = libc.mlpPredict(idMLP,raveled , raveled.size, isClassification)
+            raveled = input_x.ravel()
+            predictCount = libc.mlpPredict(idMLP, raveled, raveled.size, isClassification)
             f=libc.mlpGetPredictData(idMLP, predictCount)
             if isClassification:
                 test_colors.append('lightblue' if f >= 0 else 'pink')
@@ -36,24 +39,23 @@ def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_s
                 test_Y.append(f)
                 test_colors.append('lightblue')
         libc.mlpDelete(idMLP)
-
-    elif  model.value==Model.LIN.value:
+    elif model.value == Model.LIN.value:
         idLinear = libc.linearCreate(isClassification,0.01, np.shape(X)[1])
         libc.linearTrain(idLinear, nbIteration,X.ravel(), Y.ravel(), np.shape(X)[0])
         test_colors = ['lightblue' if libc.linearEvaluate(idLinear, input_x) >= 0 else 'pink' for input_x in test_X]
         libc.linearDelete(idLinear)
-    elif model.value==Model.RBF.value:
+    elif model.value == Model.RBF.value:
         idRbf = libc.rbfCreate(rbfGamma)
         #rbfTrain(TypeId id, Integer sizeOfModel,const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* matrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow);
-        libc.rbfTrain(idRbf,int(np.floor(rbfRepresentantProportion*np.shape(X)[0])),X.ravel(),np.shape(X)[0],np.shape(X)[1],Y.ravel(),1,np.shape(Y)[0],rbfMaxIter)
+        libc.rbfTrain(idRbf, int(np.floor(rbfRepresentantProportion*np.shape(X)[0])), X.ravel(), np.shape(X)[0], np.shape(X)[1], Y.ravel(), 1, np.shape(Y)[0], rbfMaxIter)
         #Real rbfPredict(TypeId id,bool isClassification, const Real* rawInputs, Integer rawInputsCount);
-        test_colors = ['lightblue' if libc.rbfPredict(idRbf,isClassification, input_x.ravel(),input_x.ravel().size) >= 0 else 'pink' for input_x in test_X]
+        test_colors = ['lightblue' if libc.rbfPredict(idRbf, isClassification, input_x.ravel(), input_x.ravel().size) >= 0 else 'pink' for input_x in test_X]
 # Show prediction
     if isClassification:
         plt.scatter(test_X[:, 0], test_X[:, 1], c=test_colors)
     else:
         if threeDimensions:
-            ax.scatter(test_X, test_Y, c=test_colors)
+            ax.scatter(test_X[:, 0], test_X[:, 1], test_Y, c=test_colors)
         else:
             plt.scatter(test_X, test_Y, c=test_colors)
 
@@ -213,7 +215,7 @@ def NonLinearSimple2D(libc, model, width_size=3, height_size=3, resolution=100):
     plt.scatter(X, Y)
     Show('Non Linear Simple 2D')
 
-# Note: les graphs 3d sont broken (Montre un graph 2d + un graph 3d
+
 def LinearSimple3D(libc, model, width_size=3, height_size=3, depth_size=3, resolution=100):
     X = np.array([
         [1, 1],
