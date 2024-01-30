@@ -131,15 +131,15 @@ namespace GG::ML {
 			Integer k = static_cast<Integer>(std::floor(ML_RAND * static_cast<Real>(inputsCount)));
 			std::vector<Real> inputsK(rawAllInputs+ k * inputSize, rawAllInputs + (k + 1) * inputSize);
             std::vector<Real> outputsK(rawExpectedOutputs+ k * outputSize, rawExpectedOutputs + (k + 1) * outputSize);
-            std::cout<<" Input "<<k<<" selected, values : ";
+            //std::cout<<" Input "<<k<<" selected, values : ";
             for (int i = 0; i < inputSize; ++i) {
-                std::cout<<inputsK[i]<<" ";
+                //std::cout<<inputsK[i]<<" ";
             }
-            std::cout<<std::endl<<"Exepected output value(s) : ";
+            //std::cout<<std::endl<<"Exepected output value(s) : ";
             for (int i = 0; i < outputSize; ++i) {
-                std::cout<<outputsK[i]<<" ";
+                //std::cout<<outputsK[i]<<" ";
             }
-            std::cout<<std::endl;
+            //std::cout<<std::endl;
 			Propagate(inputsK, isClassification);
 			for (Integer j = 1; j < m_D[m_L] + 1; ++j)
 			{

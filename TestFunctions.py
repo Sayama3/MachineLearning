@@ -9,11 +9,9 @@ class Model(Enum):
     LIN = 1
     MLP = 2
     RBF = 3
-
+multiClassColors = {0: 'lightblue', 1: 'pink', 2: 'springgreen'}
 fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-
-def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_size : int, height_size : int, resolution : int, width_offset = 0, height_offset = 0, threeDimensions = False, depth_size = 0, depth_offset = 0):
+def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_size : int, height_size : int, resolution : int, width_offset = 0, height_offset = 0, threeDimensions = False,multiClass = False, depth_size = 0, depth_offset = 0):
 
     if isClassification:
         test_X = np.array([[(w / resolution) * width_size + width_offset, (h / resolution) * height_size + height_offset] for w in range(0, resolution) for h in range(0, resolution)], np.float64)
@@ -34,7 +32,15 @@ def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_s
             predictCount = libc.mlpPredict(idMLP, raveled, raveled.size, isClassification)
             f=libc.mlpGetPredictData(idMLP, predictCount)
             if isClassification:
-                test_colors.append('lightblue' if f >= 0 else 'pink')
+                if multiClass :
+                    classes=[libc.mlpGetPredictData(idMLP, n) for n in range(1,predictCount+1)]
+                    colorIndex=max(range(predictCount), key=lambda n:  classes[n])
+                    print(colorIndex)
+                    #for cl in classes:
+                        #print(cl)
+                    test_colors.append(multiClassColors.get(colorIndex, 'grey'))
+                else:
+                    test_colors.append('lightblue' if f >= 0 else 'pink')
             else:
                 test_Y.append(f)
                 test_colors.append('lightblue')
@@ -55,6 +61,7 @@ def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_s
         plt.scatter(test_X[:, 0], test_X[:, 1], c=test_colors)
     else:
         if threeDimensions:
+            ax = fig.add_subplot(111, projection='3d')
             ax.scatter(test_X[:, 0], test_X[:, 1], test_Y, c=test_colors)
         else:
             plt.scatter(test_X, test_Y, c=test_colors)
@@ -162,8 +169,8 @@ def MultiCross(libc, model, width_size=2, height_size=2, resolution=100, width_o
     X.astype(np.float64)
 
     # Note: L'exemple stipule MLP (2, ?, ?, 3)... good luck
-    entries = np.array([2, 3, 3, 3], np.int32)
-    Predict(libc, model, True, entries, X, Y, width_size, height_size, resolution, width_offset, height_offset)
+    entries = np.array([2, 5, 5, 3], np.int32)
+    Predict(libc, model, True, entries, X, Y, width_size, height_size, resolution, width_offset, height_offset,False,True)
 
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][0] == 1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][0] == 1, enumerate(X)))))[:, 1],
