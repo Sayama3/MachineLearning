@@ -60,6 +60,7 @@ namespace GG::ML {
 			for (Integer j = 0; j < m_D[l] + 1; ++j)
 			{
 				m_Deltas[l].push_back(0.0);
+                //std::cout<<l<<" Inited "<<j<<std::endl;
 				if(j == 0)
 				{
 					m_X[l].push_back(1.0);
@@ -81,6 +82,7 @@ namespace GG::ML {
 	Real MultiLayerPerceptron::GetPredictData(Integer index)
 	{
 		auto& arr = m_X[m_L];
+        //std::cout<<index<<"index,m_L"<<m_L<<" layerSize : "<<arr.size()<<" value : "<<arr[index]<<std::endl;
 		return arr[index];
 	}
 
@@ -98,9 +100,6 @@ namespace GG::ML {
 				Real sum = 0;
                 for (Integer i = 0; i < m_D[l - 1] + 1; ++i)
 				{
-                    if(i==0 && std::abs( m_X[l - 1][i]) > std::pow(10, -200)){
-                        //std::cout << "Bias value > 0 " << m_X[l - 1][i];
-                    }
                     sum += m_W[l][i][j] * m_X[l - 1][i];
 				}
 				if(l < m_L || isClassification)
@@ -116,6 +115,7 @@ namespace GG::ML {
 		Propagate(inputs, isClassification);
 
 		auto& arr = m_X[m_L];
+        //std::cout<<static_cast<Integer>(arr.size()) - 1<<" is size of "<<m_L<< "layer" <<std::endl;
 		return static_cast<Integer>(arr.size()) - 1;
 	}
 

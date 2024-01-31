@@ -105,25 +105,30 @@ model=TestFunctions.Model.MLP
 #TestFunctions.XOR(libc, model)
 TestFunctions.rbfRepresentantProportion=1
 TestFunctions.nbIteration=1000
-#TestFunctions.XOR(libc, model)
+TestFunctions.XOR(libc, model)
 TestFunctions.nbIteration=500
 #TestFunctions.rbfRepresentantProportion=0.1
 #TestFunctions.LinearMultiple(libc, model)
 TestFunctions.nbIteration=50000
 #Fails with .8
 TestFunctions.rbfRepresentantProportion=.8
-#TestFunctions.Cross(libc,model)
+#Cross sometimes fails for some reasone, maybe random initialisation
+TestFunctions.Cross(libc,model)
 #fine with .1 even with max 100 for KMean
 TestFunctions.rbfRepresentantProportion=0.1
 #TestFunctions.Cross(libc,TestFunctions.Model.RBF)
 TestFunctions.nbIteration=100000
-TestFunctions.MultiCross(libc,model)
+TestFunctions.MultiLinear3Classes(libc,model)
+TestFunctions.nbIteration=50000
+#TestFunctions.MultiCross(libc,model,resolution=50)
+#TestFunctions.LinearSimple3D(libc,model)
+#TestFunctions.NonLinearSimple3D(libc,model)
 #Dimensions of entry vector causes crash for those two ?
 #Regression
-#TestFunctions.nbIteration=1000
-#TestFunctions.LinearSimple2D(libc,  TestFunctions.Model.MLP)
-#TestFunctions.nbIteration=5000
-#TestFunctions.NonLinearSimple2D(libc,  TestFunctions.Model.MLP)
+TestFunctions.nbIteration=1000
+#TestFunctions.LinearSimple2D(libc,  model)
+TestFunctions.nbIteration=5000
+#TestFunctions.NonLinearSimple2D(libc,  model)
 #TestFunctions.LinearSimple3D(libc, False)
 #TestFunctions.MultiLinear3Classes(libc,False)
 
