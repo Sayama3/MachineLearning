@@ -10,9 +10,17 @@ class Model(Enum):
     MLP = 2
     RBF = 3
 multiClassColors = {0: 'lightblue', 1: 'pink', 2: 'lightgreen'}
-fig = plt.figure()
-#fig3D = plt.figure()
-#ax = fig3D.add_subplot(111, projection='3d')
+ax=None
+fig=None
+def Init(is3D : bool):
+    global fig
+    if not is3D :
+        fig= plt.figure()
+    else :
+        global ax
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+
 def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_size : int, height_size : int, resolution : int, width_offset = 0, height_offset = 0, threeDimensions = False,multiClass = False, depth_size = 0, depth_offset = 0):
 
     if isClassification:
