@@ -10,9 +10,9 @@ class Model(Enum):
     MLP = 2
     RBF = 3
 multiClassColors = {0: 'lightblue', 1: 'pink', 2: 'lightgreen'}
-#fig = plt.figure()
-fig3D = plt.figure()
-ax = fig3D.add_subplot(111, projection='3d')
+fig = plt.figure()
+#fig3D = plt.figure()
+#ax = fig3D.add_subplot(111, projection='3d')
 def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_size : int, height_size : int, resolution : int, width_offset = 0, height_offset = 0, threeDimensions = False,multiClass = False, depth_size = 0, depth_offset = 0):
 
     if isClassification:
@@ -68,7 +68,12 @@ def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_s
         #rbfTrain(TypeId id, Integer sizeOfModel,const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* matrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow);
         libc.rbfTrain(idRbf, int(np.floor(rbfRepresentantProportion*np.shape(X)[0])), X.ravel(), np.shape(X)[0], np.shape(X)[1], Y.ravel(), outputSize, np.shape(Y)[0], rbfMaxIter)
         #Real rbfPredict(TypeId id,bool isClassification, const Real* rawInputs, Integer rawInputsCount);
-        test_colors = ['lightblue' if libc.rbfPredict(idRbf, isClassification, input_x.ravel(), input_x.ravel().size) >= 0 else 'pink' for input_x in test_X]
+        arr=[libc.rbfPredict(idRbf, isClassification, input_x.ravel(), input_x.ravel().size) for input_x in test_X]
+        if isClassification :
+            test_colors = ['lightblue' if f>= 0 else 'pink' for f in arr]
+        else :
+            test_Y = arr
+            test_colors = ['grey' for n in range(len(arr))]
 # Show prediction
     if isClassification:
         if threeDimensions :
