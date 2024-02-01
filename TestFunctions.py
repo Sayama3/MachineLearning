@@ -10,15 +10,19 @@ class Model(Enum):
     MLP = 2
     RBF = 3
 multiClassColors = {0: 'lightblue', 1: 'pink', 2: 'lightgreen'}
-fig = plt.figure()
-#fig3D = plt.figure()
-#ax = fig3D.add_subplot(111, projection='3d')
+#fig = plt.figure()
+fig3D = plt.figure()
+ax = fig3D.add_subplot(111, projection='3d')
 def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_size : int, height_size : int, resolution : int, width_offset = 0, height_offset = 0, threeDimensions = False,multiClass = False, depth_size = 0, depth_offset = 0):
 
     if isClassification:
-        test_X = np.array([[(w / resolution) * width_size + width_offset, (h / resolution) * height_size + height_offset] for w in range(0, resolution) for h in range(0, resolution)], np.float64)
+        if threeDimensions:
+            test_X = np.array([[(w / resolution) * width_size + width_offset, (h / resolution) * height_size + height_offset,(z/resolution)*depth_size+depth_offset] for w in range(0, resolution) for h in range(0, resolution) for z in range(0,resolution)], np.float64)
+        else:
+            test_X = np.array([[(w / resolution) * width_size + width_offset, (h / resolution) * height_size + height_offset] for w in range(0, resolution) for h in range(0, resolution)], np.float64)
     else:
         if threeDimensions:
+            #When in regression we sample in one less dimension so in fact it's same x as 2D classification
             test_X = np.array([[(w / resolution) * width_size + width_offset, (h / resolution) * height_size + height_offset] for w in range(0, resolution) for h in range(0, resolution)], np.float64)
         else:
             test_X = np.array([[(w / resolution) * width_size + width_offset] for w in range(0, resolution)], np.float64)
@@ -52,7 +56,7 @@ def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_s
                     test_colors.append('lightblue' if f >= 0 else 'pink')
             else:
                 test_Y.append(f)
-                test_colors.append('lightblue')
+                test_colors.append('grey')
         libc.mlpDelete(idMLP)
     elif model.value == Model.LIN.value:
         idLinear = libc.linearCreate(isClassification,0.01, np.shape(X)[1])
@@ -67,7 +71,10 @@ def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_s
         test_colors = ['lightblue' if libc.rbfPredict(idRbf, isClassification, input_x.ravel(), input_x.ravel().size) >= 0 else 'pink' for input_x in test_X]
 # Show prediction
     if isClassification:
-        plt.scatter(test_X[:, 0], test_X[:, 1], c=test_colors)
+        if threeDimensions :
+            ax.scatter(test_X[:, 0], test_X[:, 1], test_X[:, 2] , c=test_colors)
+        else :
+            plt.scatter(test_X[:, 0], test_X[:, 1], c=test_colors)
     else:
         if threeDimensions:
             ax.scatter(test_X[:, 0], test_X[:, 1], test_Y, c=test_colors)
@@ -244,7 +251,7 @@ def LinearSimple3D(libc, model, width_size=3, height_size=3, depth_size=3, resol
     ], np.float64)
 
     # Should be [2 ,1], but this leads to a crash...
-    entries = np.array([1, 2, 1], np.int32)
+    entries = np.array([2, 1], np.int32)
     Predict(libc, model, False, entries, X, Y, width_size, height_size, resolution, 0, 0, True, depth_size)
 
     ax.scatter(X[:, 0], X[:, 1], Y)
@@ -264,7 +271,7 @@ def LinearTricky3D(libc, model, width_size=3, height_size=3, depth_size=3, resol
     ], np.float64)
 
     # Should be [2 ,1], but this leads to a crash...
-    entries = np.array([1, 2, 1], np.int32)
+    entries = np.array([2, 1], np.int32)
     Predict(libc, model, False, entries, X, Y, width_size, height_size, resolution, 0, 0, True, depth_size)
 
     ax.scatter(X[:, 0], X[:, 1], Y)
@@ -286,7 +293,7 @@ def NonLinearSimple3D(libc, model, width_size=1, height_size=1, depth_size=1, re
     ], np.float64)
 
     # Should be [2, 2, 1] but this leads to a crash
-    entries = np.array([1, 2, 1], np.int32)
+    entries = np.array([2, 2, 1], np.int32)
     Predict(libc, model, False, entries, X, Y, width_size, height_size, resolution, 0, 0, True, depth_size)
 
     ax.scatter(X[:, 0], X[:, 1], Y)
