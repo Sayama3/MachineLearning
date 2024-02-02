@@ -270,7 +270,11 @@ void rbfSave(TypeId id, const char* fullPath)
 	}
 	auto* rbf = (*s_RBFs)[id];
 	std::filesystem::path path(fullPath);
-	rbf->save(path);
+	bool success = rbf->save(path);
+	if(!success)
+	{
+		std::cerr << "Save of Linear '" << std::to_string(id) << "' has failed." << std::endl;
+	}
 }
 
 TypeId rbfLoad(const char* fullPath)
