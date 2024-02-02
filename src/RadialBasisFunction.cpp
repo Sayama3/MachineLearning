@@ -3,6 +3,8 @@
 //
 
 #include "RadialBasisFunction.h"
+#include <iostream>
+#include <fstream>
 #define KMEAN_EPS 0.000001
 
 
@@ -144,3 +146,50 @@ void RadialBasisFunction::train(Integer nbOfRepresentants, const std::vector<std
 
 
 }
+
+RadialBasisFunction::RadialBasisFunction(std::filesystem::path fullPath) {
+	if(!is_regular_file(fullPath))
+	{
+		std::cerr << "The file '" << fullPath <<"' is not a regular file." << std::endl;
+		return;
+	}
+	std::ifstream saveFile(fullPath, std::ios::binary);
+	saveFile.read(reinterpret_cast<char *>(&gamma), sizeof(gamma));
+
+	Integer rows;
+	Integer cols;
+	Integer size;
+	saveFile.read(reinterpret_cast<char *>(&rows), sizeof(rows));
+	saveFile.read(reinterpret_cast<char *>(&cols), sizeof(cols));
+	saveFile.read(reinterpret_cast<char *>(&size), sizeof(size));
+	m_W.resize(Eigen::NoChange, cols);
+	for (int i = 0; i < size; ++i) {
+		Real weight;
+		saveFile.read(reinterpret_cast<char *>(&weight), sizeof(weight));
+		m_W[i] = weight;
+	}
+}
+
+bool RadialBasisFunction::save(std::filesystem::path fullPath) {
+	if(!is_regular_file(fullPath))
+	{
+		std::cerr << "The file '" << fullPath <<"' is not a regular file." << std::endl;
+		return false;
+	}
+	std::ofstream saveFile(fullPath, std::ios::binary | std::ios::app | std::ios::trunc);
+	saveFile.write(reinterpret_cast<const char *>(&gamma), sizeof(gamma));
+
+	Integer rows = m_W.rows();
+	Integer cols = m_W.cols();
+	Integer size = m_W.size();
+	saveFile.write(reinterpret_cast<const char *>(&rows), sizeof(rows));
+	saveFile.write(reinterpret_cast<const char *>(&cols), sizeof(cols));
+	saveFile.write(reinterpret_cast<const char *>(&size), sizeof(size));
+	for (int i = 0; i < size; ++i) {
+		Real weight = m_W[i];
+		saveFile.write(reinterpret_cast<const char *>(&weight), sizeof(weight));
+	}
+
+	return false;
+}
+

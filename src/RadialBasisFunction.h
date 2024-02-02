@@ -11,15 +11,16 @@
 #include <iostream>
 #include "UUID.hpp"
 #include <limits>
+#include <filesystem>
 #include <Eigen/Dense>
 
 class RadialBasisFunction {
 public:
-    inline RadialBasisFunction(Real gamma):gamma(gamma){
-
-    }
+    inline RadialBasisFunction(Real gamma) : gamma(gamma) {}
+	RadialBasisFunction(std::filesystem::path fullPath);
     Real predict(bool isClassification,const Eigen::Matrix<Real, Eigen::Dynamic,1>& inputs);
     void train(Integer nbOfRepresentants,const std::vector<std::vector<Real>>& inputs,const Eigen::Matrix<Real, Eigen::Dynamic,1>& outputs,Integer maxKMeanIter);
+	bool save(std::filesystem::path fullPath);
 private:
     Real gamma;
     std::vector<std::vector<Real>> representants;

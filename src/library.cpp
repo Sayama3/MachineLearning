@@ -240,3 +240,24 @@ void rbfTrainDefault(TypeId id, Integer sizeOfModel, const Real* rawAllInputs, I
     rbfTrain(id, sizeOfModel, rawAllInputs, numberOfInputSubArray, sizeOfInputSubArray,
              rawMatrixOutputRowAligned, sizeOfRow, numberOfRow, 1000);
 }
+
+void rbfSave(TypeId id, const char* fullPath)
+{
+	if (!rbfIsValid(id)) {
+		ML_LOG("'rbfSave' - id '" << std::to_string(id) << "' doesn't exist.");
+		return;
+	}
+	auto* rbf = (*s_RBFs)[id];
+	std::filesystem::path path(fullPath);
+	rbf->save(path);
+}
+
+TypeId rbfLoad(const char* fullPath)
+{
+	if(!s_RBFs) return -1;
+	std::filesystem::path path(fullPath);
+	s_RBFs->push_back(new RadialBasisFunction(path));
+	auto index = s_RBFs->size() - 1;
+	ML_LOG("Create RadialBasisFunction at index '" << std::to_string(index) << "'");
+	return index;
+}

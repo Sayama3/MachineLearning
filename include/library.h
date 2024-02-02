@@ -37,5 +37,7 @@ extern "C"
 	ML_API Real rbfPredict(TypeId id, bool isClassification,const Real* rawInputs, Integer rawInputsCount);
     ML_API void rbfTrain(TypeId id, Integer sizeOfModel,const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* matrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow,Integer maxKMeanIter);
     ML_API void rbfTrainDefault(TypeId id, Integer sizeOfModel,const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* matrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow);
+	ML_API void rbfSave(TypeId id, const char* fullPath);
+	ML_API TypeId rbfLoad(const char* fullPath);
 
 }
