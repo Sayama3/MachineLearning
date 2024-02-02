@@ -211,7 +211,7 @@ namespace GG::ML {
 			std::cerr << "The file '" << path <<"' is not a regular file." << std::endl;
 			return;
 		}
-		std::fstream saveFile(path, std::ios::in | std::ios::binary);
+		std::ifstream saveFile(path, std::ios::binary);
 
 		//Read Layers
 		Integer numberOfLayer;
@@ -247,7 +247,12 @@ namespace GG::ML {
 
 	bool MultiLayerPerceptron::Save(const std::filesystem::path &path)
 	{
-		std::fstream saveFile(path, std::ios::out | std::ios::binary | std::ios::app);
+		if(!is_regular_file(path))
+		{
+			std::cerr << "The file '" << path <<"' is not a regular file." << std::endl;
+			return false;
+		}
+		std::ofstream saveFile(path, std::ios::trunc | std::ios::binary | std::ios::app);
 
 		//Write Layers
 		Integer numberOfLayer = m_D.size();
