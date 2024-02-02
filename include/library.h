@@ -30,6 +30,8 @@ extern "C"
 
     ML_API Real linearEvaluate(TypeId id,const Real* entries);
     ML_API void linearDelete(TypeId id);
+	ML_API void linearSave(TypeId id, const char* fullPath);
+	ML_API TypeId linearLoad(const char* fullPath);
 
 	ML_API TypeId rbfCreate(Real gamma);
 	ML_API bool rbfIsValid(TypeId id);

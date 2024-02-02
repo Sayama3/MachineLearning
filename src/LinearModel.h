@@ -10,6 +10,7 @@
 #include <limits>
 #include <cmath>
 #include <iostream>
+#include <filesystem>
 
 class LinearModel {
 private:
@@ -24,12 +25,15 @@ public:
             weight.push_back(ML_RAND);
         }
     }
+	LinearModel(const std::filesystem::path& fullPath);
     void train(int times,const Real* entries, const Real* output, Integer entryCount);
     inline Real predict(const Real* x) {
         std::vector<Real> v(x,x+size);
         return predict(v);
     }
     Real predict(const std::vector<Real> x);
+
+	bool save(const std::filesystem::path& fullPath);
 private:
     void trainOnceRosenblatt(std::vector<Real> input,Real expected);
 

@@ -172,6 +172,27 @@ void linearDelete(TypeId id)
 	(*s_Linears)[id] = nullptr;
 }
 
+void linearSave(TypeId id, const char* fullPath)
+{
+	if(!linearIsValid(id)){ML_LOG("'linearTrain' - id '" << std::to_string(id) << "' doesn't exist."); return;}
+	std::filesystem::path path(fullPath);
+	bool success = (*s_Linears)[id]->save(path);
+	if(!success)
+	{
+		std::cerr << "Save of Linear '" << std::to_string(id) << "' has failed." << std::endl;
+	}
+}
+
+TypeId linearLoad(const char* fullPath)
+{
+	if(!s_Linears) return -1;
+	std::filesystem::path path(fullPath);
+	s_Linears->push_back(new LinearModel(path));
+	auto index = s_Linears->size() - 1;
+	ML_LOG("Create linear at index '" << std::to_string(index) << "'");
+	return index;
+}
+
 
 // =============== RADIAL BASIS FUNCTIONS =============== //
 
