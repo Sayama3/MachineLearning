@@ -8,6 +8,7 @@
 #include "Vector2D.hpp"
 #include "Vector.hpp"
 #include <vector>
+#include <filesystem>
 
 namespace GG::ML {
 
@@ -22,16 +23,18 @@ namespace GG::ML {
 
 	public:
 		MultiLayerPerceptron(const Integer* layerCounts, Integer layerCount);
+		MultiLayerPerceptron(const std::filesystem::path& path);
 		~MultiLayerPerceptron();
 
 		Integer Predict(const Real* rawInputs, Integer rawInputsCount, bool isClassification = true);
 		Real GetPredictData(Integer index);
 		void Train(const Real* rawAllInputs, Integer inputSize, Integer inputsCount, const Real* rawExcpectedOutputs, Integer outputSize, Integer outputsCount, bool isClassification = true, Real alpha = 0.01f, Integer maxIter = 1000);
 
+		bool Save(const std::filesystem::path& path);
 	private:
 		void Propagate(const std::vector<Real>& inputs, bool isClassification);
 		Integer Predict(const std::vector<Real>& inputs, bool isClassification);
-		void initialize();
+		void initialize(bool initWeight = true);
 	};
 
 } // GG

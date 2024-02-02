@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include <filesystem>
 
 using namespace GG::ML;
 
@@ -114,6 +115,28 @@ void mlpTrain(TypeId id, const Real* rawAllInputs, Integer inputSize, Integer in
 	if(!mlpIsValid(id)){ML_LOG("'mlpTrain' - id '" << std::to_string(id) << "' doesn't exist."); return;}
 
 	(*s_MLPs)[id]->Train(rawAllInputs, inputSize, inputsCount , rawExcpectedOutputs, outputSize, outputsCount , isClassification , alpha , maxIter);
+}
+
+void mlpSave(TypeId id, const char* fullPath)
+{
+	if(!mlpIsValid(id)){ML_LOG("'mlpSave' - id '" << std::to_string(id) << "' doesn't exist."); return;}
+	std::filesystem::path path(fullPath);
+	auto& mlp = (*s_MLPs)[id];
+	bool success = mlp->Save(path);
+	if(!success)
+	{
+		std::cerr << "Save of MLP '" << std::to_string(id) << "' has failed." << std::endl;
+	}
+}
+
+TypeId mlpLoad(const char* fullPath)
+{
+	if(!s_MLPs) return -1;
+	std::filesystem::path path(fullPath);
+	s_MLPs->push_back(new MultiLayerPerceptron(path));
+	TypeId index = s_MLPs->size() - 1;
+	ML_LOG("Create mlp at index '" << std::to_string(index) << "'");
+	return index;
 }
 
 // =============== LINEAR MODEL =============== //
