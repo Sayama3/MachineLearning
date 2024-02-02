@@ -147,7 +147,7 @@ void RadialBasisFunction::train(Integer nbOfRepresentants, const std::vector<std
 
 }
 
-RadialBasisFunction::RadialBasisFunction(std::filesystem::path fullPath) {
+RadialBasisFunction::RadialBasisFunction(const std::filesystem::path& fullPath) {
 	if(!is_regular_file(fullPath))
 	{
 		std::cerr << "The file '" << fullPath <<"' is not a regular file." << std::endl;
@@ -170,7 +170,7 @@ RadialBasisFunction::RadialBasisFunction(std::filesystem::path fullPath) {
 	}
 }
 
-bool RadialBasisFunction::save(std::filesystem::path fullPath) {
+bool RadialBasisFunction::save(const std::filesystem::path& fullPath) {
 	if(!is_regular_file(fullPath))
 	{
 		std::cerr << "The file '" << fullPath <<"' is not a regular file." << std::endl;

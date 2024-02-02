@@ -17,10 +17,10 @@
 class RadialBasisFunction {
 public:
     inline RadialBasisFunction(Real gamma) : gamma(gamma) {}
-	RadialBasisFunction(std::filesystem::path fullPath);
+	RadialBasisFunction(const std::filesystem::path& fullPath);
     Real predict(bool isClassification,const Eigen::Matrix<Real, Eigen::Dynamic,1>& inputs);
     void train(Integer nbOfRepresentants,const std::vector<std::vector<Real>>& inputs,const Eigen::Matrix<Real, Eigen::Dynamic,1>& outputs,Integer maxKMeanIter);
-	bool save(std::filesystem::path fullPath);
+	bool save(const std::filesystem::path& fullPath);
 private:
     Real gamma;
     std::vector<std::vector<Real>> representants;
