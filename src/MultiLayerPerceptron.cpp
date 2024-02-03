@@ -276,6 +276,9 @@ namespace GG::ML {
 				}
 			}
 		}
+		saveFile.flush();
+		saveFile.close();
+		return true;
 	}
 
 } // GG

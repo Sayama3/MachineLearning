@@ -121,6 +121,7 @@ void mlpSave(TypeId id, const char* fullPath)
 {
 	if(!mlpIsValid(id)){ML_LOG("'mlpSave' - id '" << std::to_string(id) << "' doesn't exist."); return;}
 	std::filesystem::path path(fullPath);
+	std::filesystem::create_directories(path);
 	auto& mlp = (*s_MLPs)[id];
 	bool success = mlp->Save(path);
 	if(!success)
@@ -176,6 +177,7 @@ void linearSave(TypeId id, const char* fullPath)
 {
 	if(!linearIsValid(id)){ML_LOG("'linearTrain' - id '" << std::to_string(id) << "' doesn't exist."); return;}
 	std::filesystem::path path(fullPath);
+	std::filesystem::create_directories(path);
 	bool success = (*s_Linears)[id]->save(path);
 	if(!success)
 	{
@@ -270,6 +272,7 @@ void rbfSave(TypeId id, const char* fullPath)
 	}
 	auto* rbf = (*s_RBFs)[id];
 	std::filesystem::path path(fullPath);
+	std::filesystem::create_directories(path);
 	bool success = rbf->save(path);
 	if(!success)
 	{

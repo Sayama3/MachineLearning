@@ -76,6 +76,10 @@ bool LinearModel::save(const std::filesystem::path &fullPath) {
 	for (int i = 0; i < weightCount; ++i) {
 		saveFile.write(reinterpret_cast<const char*>(&weight[i]), sizeof(weight[i]));
 	}
+	saveFile.flush();
+	saveFile.close();
+
+	return true;
 }
 
 

@@ -190,6 +190,8 @@ bool RadialBasisFunction::save(const std::filesystem::path& fullPath) {
 		saveFile.write(reinterpret_cast<const char *>(&weight), sizeof(weight));
 	}
 
-	return false;
+	saveFile.flush();
+	saveFile.close();
+	return true;
 }
 
