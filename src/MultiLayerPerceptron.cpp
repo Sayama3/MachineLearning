@@ -300,5 +300,10 @@ namespace GG::ML {
 		return m_W[i][i1][i2];
 	}
 
+	void MultiLayerPerceptron::SetWeight(Integer i, Integer i1, Integer i2, Real d)
+	{
+		m_W[i][i1][i2] = d;
+	}
+
 } // GG
 // ML

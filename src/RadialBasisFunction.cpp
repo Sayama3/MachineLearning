@@ -216,3 +216,10 @@ Real RadialBasisFunction::getWeight(Integer index) const {
 	return m_W[index];
 }
 
+void RadialBasisFunction::setWeight(Integer row, Integer col, Real d) {
+	m_W(row, col) = d;
+}
+
+void RadialBasisFunction::setWeight(Integer index, Real d) {
+	m_W[index] = d;
+}

@@ -34,6 +34,9 @@ public:
 
 	Real getWeight(Integer index) const;
 
+	void setWeight(Integer row, Integer col, Real d);
+	void setWeight(Integer index, Real d);
+
 private:
     Real gamma;
     std::vector<std::vector<Real>> representants;

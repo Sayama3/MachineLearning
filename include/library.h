@@ -31,6 +31,7 @@ extern "C"
 	ML_API Integer mlpGetSubWeightCount(TypeId id, Integer subIndex);
 	ML_API Integer mlpGetSubSubWeightCount(TypeId id, Integer subIndex, Integer subSubIndex);
 	ML_API Real mlpGetWeight(TypeId id, Integer subIndex, Integer subSubIndex, Integer subSubSubIndex);
+	ML_API void mlpSetWeight(TypeId id, Integer subIndex, Integer subSubIndex, Integer subSubSubIndex, Real weight);
 
 	// Linear Functions
 	ML_API bool linearIsValid(TypeId id);
@@ -47,6 +48,7 @@ extern "C"
 	ML_API Integer linearIsClassification(TypeId id);
 	ML_API Integer linearWeightCount(TypeId id);
 	ML_API Real linearGetWeight(TypeId id, Integer index);
+	ML_API void linearSetWeight(TypeId id, Integer index, Real weight);
 
 	// RBF Function
 	ML_API TypeId rbfCreate(Real gamma);
@@ -62,7 +64,8 @@ extern "C"
 	ML_API Integer rbfGetRows(TypeId id);
 	ML_API Integer rbfGetCols(TypeId id);
 	ML_API Real rbfGetWeight(TypeId id, Integer row, Integer col);
+	ML_API void rbfSetWeight(TypeId id, Integer row, Integer col, Real weight);
 	ML_API Integer rbfGetSize(TypeId id);
 	ML_API Real rbfGetWeightByIndex(TypeId id, Integer index);
-
+	ML_API void rbfSetWeightByIndex(TypeId id, Integer index, Real weight);
 }

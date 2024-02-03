@@ -97,4 +97,8 @@ Real LinearModel::getWeight(Integer i) const {
 	return weight[i];
 }
 
+void LinearModel::setWeight(Integer i, Real d) {
+	weight[i] = d;
+}
+
 

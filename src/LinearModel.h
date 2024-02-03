@@ -45,6 +45,8 @@ public:
 
 	Real getWeight(Integer i) const;
 
+	void setWeight(Integer i, Real d);
+
 private:
     void trainOnceRosenblatt(std::vector<Real> input,Real expected);
 

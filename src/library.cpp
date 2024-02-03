@@ -176,6 +176,12 @@ Real mlpGetWeight(TypeId id, Integer subIndex, Integer subSubIndex, Integer subS
 	return (*s_MLPs)[id]->GetWeight(subIndex, subSubIndex, subSubSubIndex);
 }
 
+void mlpSetWeight(TypeId id, Integer subIndex, Integer subSubIndex, Integer subSubSubIndex, Real weight)
+{
+	if(!mlpIsValid(id)) {ML_LOG("'mlpGetWeight' - id '" << id << "' doesn't exist."); return;}
+	return (*s_MLPs)[id]->SetWeight(subIndex, subSubIndex, subSubSubIndex, weight);
+}
+
 
 // =============== LINEAR MODEL =============== //
 
@@ -260,6 +266,12 @@ Real linearGetWeight(TypeId id, Integer index)
 {
 	if(!linearIsValid(id)){ML_LOG("'linearGetWeight' - id '" << std::to_string(id) << "' doesn't exist."); return -1;}
 	return (*s_Linears)[id]->getWeight(index);
+}
+
+void linearSetWeight(TypeId id, Integer index, Real weight)
+{
+	if(!linearIsValid(id)){ML_LOG("'linearGetWeight' - id '" << std::to_string(id) << "' doesn't exist."); return;}
+	return (*s_Linears)[id]->setWeight(index, weight);
 }
 
 
@@ -389,5 +401,16 @@ Real rbfGetWeightByIndex(TypeId id, Integer index)
 {
 	if(!rbfIsValid(id)) {ML_LOG("'rbfGetWeightByIndex' - id '" << std::to_string(id) << "' doesn't exist."); return -1;}
 	return (*s_RBFs)[id]->getWeight(index);
+}
+void rbfSetWeight(TypeId id, Integer row, Integer col, Real weight)
+{
+	if(!rbfIsValid(id)) {ML_LOG("'rbfGetWeight' - id '" << std::to_string(id) << "' doesn't exist."); return;}
+	(*s_RBFs)[id]->setWeight(row, col, weight);
+}
+
+void rbfSetWeightByIndex(TypeId id, Integer index, Real weight)
+{
+	if(!rbfIsValid(id)) {ML_LOG("'rbfGetWeightByIndex' - id '" << std::to_string(id) << "' doesn't exist."); return;}
+	(*s_RBFs)[id]->setWeight(index, weight);
 }
 

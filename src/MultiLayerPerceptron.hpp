@@ -44,6 +44,8 @@ namespace GG::ML {
 
 		Real GetWeight(Integer i, Integer i1, Integer i2);
 
+		void SetWeight(Integer i, Integer i1, Integer i2, Real d);
+
 	private:
 		void Propagate(const std::vector<Real>& inputs, bool isClassification);
 		Integer Predict(const std::vector<Real>& inputs, bool isClassification);
