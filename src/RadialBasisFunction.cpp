@@ -173,11 +173,6 @@ RadialBasisFunction::RadialBasisFunction(const std::filesystem::path& fullPath) 
 }
 
 bool RadialBasisFunction::save(const std::filesystem::path& fullPath) {
-	if(!is_regular_file(fullPath))
-	{
-		std::cerr << "The file '" << fullPath <<"' is not a regular file." << std::endl;
-		return false;
-	}
 	std::ofstream saveFile(fullPath, std::ios::binary | std::ios::app | std::ios::trunc);
 	saveFile.write(reinterpret_cast<const char *>(&gamma), sizeof(gamma));
 
@@ -195,5 +190,29 @@ bool RadialBasisFunction::save(const std::filesystem::path& fullPath) {
 	saveFile.flush();
 	saveFile.close();
 	return true;
+}
+
+Real RadialBasisFunction::getGamma() const {
+	return gamma;
+}
+
+Integer RadialBasisFunction::getRows() const {
+	return m_W.rows();
+}
+
+Integer RadialBasisFunction::getCols() const {
+	return m_W.cols();
+}
+
+Real RadialBasisFunction::getWeight(Integer row, Integer col) const {
+	return m_W(row, col);
+}
+
+Integer RadialBasisFunction::getSize() const {
+	return m_W.size();
+}
+
+Real RadialBasisFunction::getWeight(Integer index) const {
+	return m_W[index];
 }
 

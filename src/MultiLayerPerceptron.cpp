@@ -247,11 +247,6 @@ namespace GG::ML {
 
 	bool MultiLayerPerceptron::Save(const std::filesystem::path &path)
 	{
-		if(!is_regular_file(path))
-		{
-			std::cerr << "The file '" << path <<"' is not a regular file." << std::endl;
-			return false;
-		}
 		std::ofstream saveFile(path, std::ios::trunc | std::ios::binary | std::ios::app);
 
 		//Write Layers
@@ -279,6 +274,30 @@ namespace GG::ML {
 		saveFile.flush();
 		saveFile.close();
 		return true;
+	}
+
+	Integer MultiLayerPerceptron::GetLayersCount() {
+		return m_D.size();
+	}
+
+	Integer MultiLayerPerceptron::GetLayer(Integer i) {
+		return m_D[i];
+	}
+
+	Integer MultiLayerPerceptron::GetWeightCount() {
+		return m_W.size();
+	}
+
+	Integer MultiLayerPerceptron::GetSubWeightCount(Integer i) {
+		return m_W[i].size();
+	}
+
+	Integer MultiLayerPerceptron::GetSubSubWeightCount(Integer i, Integer i1) {
+		return m_W[i][i1].size();
+	}
+
+	Real MultiLayerPerceptron::GetWeight(Integer i, Integer i1, Integer i2) {
+		return m_W[i][i1][i2];
 	}
 
 } // GG

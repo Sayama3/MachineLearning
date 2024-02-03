@@ -140,6 +140,43 @@ TypeId mlpLoad(const char* fullPath)
 	return index;
 }
 
+Integer mlpGetLayersCount(TypeId id)
+{
+	if(!mlpIsValid(id)) {ML_LOG("'mlpGetLayersCount' - id '" << id << "' doesn't exist."); return -1;}
+	return (*s_MLPs)[id]->GetLayersCount();
+}
+
+Integer mlpGetLayer(TypeId id, Integer index)
+{
+	if(!mlpIsValid(id)) {ML_LOG("'mlpGetLayer' - id '" << id << "' doesn't exist."); return -1;}
+	return (*s_MLPs)[id]->GetLayer(index);
+}
+
+Integer mlpGetWeightCount(TypeId id)
+{
+	if(!mlpIsValid(id)) {ML_LOG("'mlpGetWeightCount' - id '" << id << "' doesn't exist."); return -1;}
+	return (*s_MLPs)[id]->GetWeightCount();
+}
+
+Integer mlpGetSubWeightCount(TypeId id, Integer subIndex)
+{
+	if(!mlpIsValid(id)) {ML_LOG("'mlpGetSubWeightCount' - id '" << id << "' doesn't exist."); return -1;}
+	return (*s_MLPs)[id]->GetSubWeightCount(subIndex);
+}
+
+Integer mlpGetSubSubWeightCount(TypeId id, Integer subIndex, Integer subSubIndex)
+{
+	if(!mlpIsValid(id)) {ML_LOG("'mlpGetSubSubWeightCount' - id '" << id << "' doesn't exist."); return -1;}
+	return (*s_MLPs)[id]->GetSubSubWeightCount(subIndex, subSubIndex);
+}
+
+Real mlpGetWeight(TypeId id, Integer subIndex, Integer subSubIndex, Integer subSubSubIndex)
+{
+	if(!mlpIsValid(id)) {ML_LOG("'mlpGetWeight' - id '" << id << "' doesn't exist."); return -1;}
+	return (*s_MLPs)[id]->GetWeight(subIndex, subSubIndex, subSubSubIndex);
+}
+
+
 // =============== LINEAR MODEL =============== //
 
 TypeId linearCreate(bool isClassification,Real step,Integer entrySize){
@@ -193,6 +230,36 @@ TypeId linearLoad(const char* fullPath)
 	auto index = s_Linears->size() - 1;
 	ML_LOG("Create linear at index '" << std::to_string(index) << "'");
 	return index;
+}
+
+Real linearGetStep(TypeId id)
+{
+	if(!linearIsValid(id)){ML_LOG("'linearGetStep' - id '" << std::to_string(id) << "' doesn't exist."); return -1;}
+	return (*s_Linears)[id]->getStep();
+}
+
+Integer linearGetSize(TypeId id)
+{
+	if(!linearIsValid(id)){ML_LOG("'linearGetSize' - id '" << std::to_string(id) << "' doesn't exist."); return -1;}
+	return (*s_Linears)[id]->getSize();
+}
+
+Integer linearIsClassification(TypeId id)
+{
+	if(!linearIsValid(id)){ML_LOG("'linearIsClassification' - id '" << std::to_string(id) << "' doesn't exist."); return -1;}
+	return (*s_Linears)[id]->IsClassification();
+}
+
+Integer linearWeightCount(TypeId id)
+{
+	if(!linearIsValid(id)){ML_LOG("'linearWeightCount' - id '" << std::to_string(id) << "' doesn't exist."); return -1;}
+	return (*s_Linears)[id]->weightCount();
+}
+
+Real linearGetWeight(TypeId id, Integer index)
+{
+	if(!linearIsValid(id)){ML_LOG("'linearGetWeight' - id '" << std::to_string(id) << "' doesn't exist."); return -1;}
+	return (*s_Linears)[id]->getWeight(index);
 }
 
 
@@ -289,3 +356,38 @@ TypeId rbfLoad(const char* fullPath)
 	ML_LOG("Create RadialBasisFunction at index '" << std::to_string(index) << "'");
 	return index;
 }
+
+Real rbfGetGamma(TypeId id)
+{
+	if(!rbfIsValid(id)) {ML_LOG("'rbfGetGamma' - id '" << std::to_string(id) << "' doesn't exist."); return -1;}
+	return (*s_RBFs)[id]->getGamma();
+}
+
+Integer rbfGetRows(TypeId id)
+{
+	if(!rbfIsValid(id)) {ML_LOG("'rbfGetRows' - id '" << std::to_string(id) << "' doesn't exist."); return -1;}
+	return (*s_RBFs)[id]->getRows();
+}
+
+Integer rbfGetCols(TypeId id)
+{
+	if(!rbfIsValid(id)) {ML_LOG("'rbfGetCols' - id '" << std::to_string(id) << "' doesn't exist."); return -1;}
+	return (*s_RBFs)[id]->getCols();
+}
+
+Real rbfGetWeight(TypeId id, Integer row, Integer col)
+{
+	if(!rbfIsValid(id)) {ML_LOG("'rbfGetWeight' - id '" << std::to_string(id) << "' doesn't exist."); return -1;}
+	return (*s_RBFs)[id]->getWeight(row, col);
+}
+Integer rbfGetSize(TypeId id)
+{
+	if(!rbfIsValid(id)) {ML_LOG("'rbfGetSize' - id '" << std::to_string(id) << "' doesn't exist."); return -1;}
+	return (*s_RBFs)[id]->getSize();
+}
+Real rbfGetWeightByIndex(TypeId id, Integer index)
+{
+	if(!rbfIsValid(id)) {ML_LOG("'rbfGetWeightByIndex' - id '" << std::to_string(id) << "' doesn't exist."); return -1;}
+	return (*s_RBFs)[id]->getWeight(index);
+}
+

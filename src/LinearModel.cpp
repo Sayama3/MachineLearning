@@ -60,11 +60,6 @@ LinearModel::LinearModel(const std::filesystem::path &fullPath) {
 }
 
 bool LinearModel::save(const std::filesystem::path &fullPath) {
-	if(!is_regular_file(fullPath))
-	{
-		std::cerr << "The file '" << fullPath <<"' is not a regular file." << std::endl;
-		return false;
-	}
 	std::ofstream saveFile(fullPath, std::ios::binary | std::ios::app | std::ios::trunc);
 	Integer classif = isClassification;
 	saveFile.write(reinterpret_cast<const char*>(&step), sizeof(step));
@@ -80,6 +75,26 @@ bool LinearModel::save(const std::filesystem::path &fullPath) {
 	saveFile.close();
 
 	return true;
+}
+
+Real LinearModel::getStep() const {
+	return step;
+}
+
+Integer LinearModel::getSize() const {
+	return size;
+}
+
+Integer LinearModel::IsClassification() const {
+	return isClassification;
+}
+
+Integer LinearModel::weightCount() const {
+	return weight.size();
+}
+
+Real LinearModel::getWeight(Integer i) const {
+	return weight[i];
 }
 
 

@@ -34,6 +34,17 @@ public:
     Real predict(const std::vector<Real> x);
 
 	bool save(const std::filesystem::path& fullPath);
+
+	Real getStep() const;
+
+	Integer getSize() const;
+
+	Integer IsClassification() const;
+
+	Integer weightCount() const;
+
+	Real getWeight(Integer i) const;
+
 private:
     void trainOnceRosenblatt(std::vector<Real> input,Real expected);
 

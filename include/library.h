@@ -24,6 +24,15 @@ extern "C"
 	ML_API void mlpSave(TypeId id, const char* fullPath);
 	ML_API TypeId mlpLoad(const char* fullPath);
 
+	ML_API Integer mlpGetLayersCount(TypeId id);
+	ML_API Integer mlpGetLayer(TypeId id, Integer index);
+
+	ML_API Integer mlpGetWeightCount(TypeId id);
+	ML_API Integer mlpGetSubWeightCount(TypeId id, Integer subIndex);
+	ML_API Integer mlpGetSubSubWeightCount(TypeId id, Integer subIndex, Integer subSubIndex);
+	ML_API Real mlpGetWeight(TypeId id, Integer subIndex, Integer subSubIndex, Integer subSubSubIndex);
+
+	// Linear Functions
 	ML_API bool linearIsValid(TypeId id);
     ML_API TypeId linearCreate(bool isClassification,Real step,Integer entrySize);
     ML_API void linearTrain(TypeId id,Integer count,const Real* entries, const Real* output, Integer entryCount);
@@ -33,6 +42,13 @@ extern "C"
 	ML_API void linearSave(TypeId id, const char* fullPath);
 	ML_API TypeId linearLoad(const char* fullPath);
 
+	ML_API Real linearGetStep(TypeId id);
+	ML_API Integer linearGetSize(TypeId id);
+	ML_API Integer linearIsClassification(TypeId id);
+	ML_API Integer linearWeightCount(TypeId id);
+	ML_API Real linearGetWeight(TypeId id, Integer index);
+
+	// RBF Function
 	ML_API TypeId rbfCreate(Real gamma);
 	ML_API bool rbfIsValid(TypeId id);
 	ML_API void rbfDelete(TypeId id);
@@ -41,5 +57,12 @@ extern "C"
     ML_API void rbfTrainDefault(TypeId id, Integer sizeOfModel,const Real* rawAllInputs, Integer numberOfInputSubArray, Integer sizeOfInputSubArray, const Real* matrixOutputRowAligned, Integer sizeOfRow, Integer numberOfRow);
 	ML_API void rbfSave(TypeId id, const char* fullPath);
 	ML_API TypeId rbfLoad(const char* fullPath);
+
+	ML_API Real rbfGetGamma(TypeId id);
+	ML_API Integer rbfGetRows(TypeId id);
+	ML_API Integer rbfGetCols(TypeId id);
+	ML_API Real rbfGetWeight(TypeId id, Integer row, Integer col);
+	ML_API Integer rbfGetSize(TypeId id);
+	ML_API Real rbfGetWeightByIndex(TypeId id, Integer index);
 
 }

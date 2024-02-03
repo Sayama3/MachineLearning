@@ -31,6 +31,19 @@ namespace GG::ML {
 		void Train(const Real* rawAllInputs, Integer inputSize, Integer inputsCount, const Real* rawExcpectedOutputs, Integer outputSize, Integer outputsCount, bool isClassification = true, Real alpha = 0.01f, Integer maxIter = 1000);
 
 		bool Save(const std::filesystem::path& path);
+
+		Integer GetLayersCount();
+
+		Integer GetLayer(Integer i);
+
+		Integer GetWeightCount();
+
+		Integer GetSubWeightCount(Integer i);
+
+		Integer GetSubSubWeightCount(Integer i, Integer i1);
+
+		Real GetWeight(Integer i, Integer i1, Integer i2);
+
 	private:
 		void Propagate(const std::vector<Real>& inputs, bool isClassification);
 		Integer Predict(const std::vector<Real>& inputs, bool isClassification);

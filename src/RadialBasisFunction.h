@@ -21,6 +21,19 @@ public:
     Real predict(bool isClassification,const Eigen::Matrix<Real, Eigen::Dynamic,1>& inputs);
     void train(Integer nbOfRepresentants,const std::vector<std::vector<Real>>& inputs,const Eigen::Matrix<Real, Eigen::Dynamic,1>& outputs,Integer maxKMeanIter);
 	bool save(const std::filesystem::path& fullPath);
+
+	Real getGamma() const;
+
+	Integer getRows() const;
+
+	Integer getCols() const;
+
+	Real getWeight(Integer row, Integer col) const;
+
+	Integer getSize() const;
+
+	Real getWeight(Integer index) const;
+
 private:
     Real gamma;
     std::vector<std::vector<Real>> representants;
