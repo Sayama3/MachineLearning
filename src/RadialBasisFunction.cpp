@@ -5,6 +5,7 @@
 #include "RadialBasisFunction.h"
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 #define KMEAN_EPS 0.000001
 
 
