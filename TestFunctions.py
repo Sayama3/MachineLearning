@@ -114,7 +114,7 @@ def LinearSimple(libc, model, width_size=4, height_size=4, resolution=100):
     # Show dataset
     plt.scatter(X[0, 0], X[0, 1], color='blue')
     plt.scatter(X[1:3, 0], X[1:3, 1], color='red')
-    Show('Linear simple')
+    Show('Linear simple', model)
 
 def LinearMultiple(libc, model, width_size=2, height_size=2, resolution=100, width_offset = 1, height_offset = 1):
     X = np.concatenate([np.random.random((50, 2)) * 0.9 + np.array([1, 1]), np.random.random((50, 2)) * 0.9 + np.array([2, 2])])
@@ -128,7 +128,7 @@ def LinearMultiple(libc, model, width_size=2, height_size=2, resolution=100, wid
 
     plt.scatter(X[0:50, 0], X[0:50, 1], color='blue')
     plt.scatter(X[50:100, 0], X[50:100, 1], color='red')
-    Show('Linear multiple')
+    Show('Linear multiple', model)
 
 
 def XOR(libc, model, width_size=1, height_size=1, width_points=100, resolution=100):
@@ -140,7 +140,7 @@ def XOR(libc, model, width_size=1, height_size=1, width_points=100, resolution=1
 
     plt.scatter(X[0:2, 0], X[0:2, 1], color='blue')
     plt.scatter(X[2:4, 0], X[2:4, 1], color='red')
-    Show('XOR')
+    Show('XOR', model)
 
 
 def Cross(libc, model, width_size=2, height_size=2, resolution=100, width_offset = -1, height_offset = -1):
@@ -158,7 +158,7 @@ def Cross(libc, model, width_size=2, height_size=2, resolution=100, width_offset
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]] == -1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]] == -1, enumerate(X)))))[:, 1],
                 color='red')
-    Show('Cross')
+    Show('Cross', model)
 
 
 def MultiLinear3Classes(libc, model, width_size=2, height_size=2, resolution=100, width_offset = -1, height_offset = -1):
@@ -186,7 +186,7 @@ def MultiLinear3Classes(libc, model, width_size=2, height_size=2, resolution=100
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][2] == 1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][2] == 1, enumerate(X)))))[:, 1],
                 color='green')
-    Show('Multi linear 3 classes')
+    Show('Multi linear 3 classes', model)
 
 
 def MultiCross(libc, model, width_size=2, height_size=2, resolution=100, width_offset = -1, height_offset = -1):
@@ -209,7 +209,7 @@ def MultiCross(libc, model, width_size=2, height_size=2, resolution=100, width_o
     plt.scatter(np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][2] == 1, enumerate(X)))))[:, 0],
                 np.array(list(map(lambda elt: elt[1], filter(lambda c: Y[c[0]][2] == 1, enumerate(X)))))[:, 1],
                 color='green')
-    Show('Multicross')
+    Show('Multicross', model)
 
 
 # Regression
@@ -228,7 +228,7 @@ def LinearSimple2D(libc, model, width_size=2, height_size=3, resolution=100):
     Predict(libc, model, False, entries, X, Y, width_size, height_size, resolution)
 
     plt.scatter(X, Y)
-    Show('Linear Simple 2D')
+    Show('Linear Simple 2D', model)
 
 
 def NonLinearSimple2D(libc, model, width_size=3, height_size=3, resolution=100):
@@ -248,7 +248,7 @@ def NonLinearSimple2D(libc, model, width_size=3, height_size=3, resolution=100):
     Predict(libc, model, False, entries, X, Y, width_size, height_size, resolution)
 
     plt.scatter(X, Y)
-    Show('Non Linear Simple 2D')
+    Show('Non Linear Simple 2D', model)
 
 
 def LinearSimple3D(libc, model, width_size=3, height_size=3, depth_size=3, resolution=100):
@@ -268,7 +268,7 @@ def LinearSimple3D(libc, model, width_size=3, height_size=3, depth_size=3, resol
     Predict(libc, model, False, entries, X, Y, width_size, height_size, resolution, 0, 0, True, depth_size)
 
     ax.scatter(X[:, 0], X[:, 1], Y)
-    Show('Linear Simple 3D')
+    Show('Linear Simple 3D', model)
 
 
 def LinearTricky3D(libc, model, width_size=3, height_size=3, depth_size=3, resolution=100):
@@ -288,7 +288,7 @@ def LinearTricky3D(libc, model, width_size=3, height_size=3, depth_size=3, resol
     Predict(libc, model, False, entries, X, Y, width_size, height_size, resolution, 0, 0, True, depth_size)
 
     ax.scatter(X[:, 0], X[:, 1], Y)
-    Show('Linear tricky 3D')
+    Show('Linear tricky 3D', model)
 
 
 def NonLinearSimple3D(libc, model, width_size=1, height_size=1, depth_size=1, resolution=100):
@@ -310,9 +310,9 @@ def NonLinearSimple3D(libc, model, width_size=1, height_size=1, depth_size=1, re
     Predict(libc, model, False, entries, X, Y, width_size, height_size, resolution, 0, 0, True, depth_size)
 
     ax.scatter(X[:, 0], X[:, 1], Y)
-    Show('Non Linear Simple 3D')
+    Show('Non Linear Simple 3D', model)
 
-def Show(title):
-    plt.title(title)
+def Show(title, model):
+    plt.title(title + ' ' + model.name)
     plt.show()
     plt.clf()
