@@ -64,7 +64,7 @@ def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_s
                     test_colors.append('lightblue' if f >= 0 else 'pink')
             else:
                 test_Y.append(f)
-                test_colors.append('grey')
+                test_colors.append('lightblue')
         libc.mlpDelete(idMLP)
     elif model.value == Model.LIN.value:
         idLinear = libc.linearCreate(isClassification,0.01, np.shape(X)[1])
@@ -81,7 +81,7 @@ def Predict(libc, model : Model, isClassification : bool, entries, X, Y, width_s
             test_colors = ['lightblue' if f>= 0 else 'pink' for f in arr]
         else :
             test_Y = arr
-            test_colors = ['grey' for n in range(len(arr))]
+            test_colors = ['lightblue' for n in range(len(arr))]
 # Show prediction
     if isClassification:
         if threeDimensions :
@@ -311,23 +311,6 @@ def NonLinearSimple3D(libc, model, width_size=1, height_size=1, depth_size=1, re
 
     ax.scatter(X[:, 0], X[:, 1], Y)
     Show('Non Linear Simple 3D')
-
-
-def AllGraphs(libc, model):
-    # Classification
-    LinearSimple(libc, model)
-    LinearMultiple(libc, model)
-    XOR(libc, model)
-    Cross(libc, model)
-    MultiLinear3Classes(libc, model)
-    MultiCross(libc, model)
-
-    # Regression
-    LinearSimple2D(libc, model)
-    NonLinearSimple2D(libc, model)
-    LinearSimple3D(libc, model)
-    LinearTricky3D(libc, model)
-    NonLinearSimple3D(libc, model)
 
 def Show(title):
     plt.title(title)
